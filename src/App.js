@@ -2,9 +2,8 @@ import React from "react";
 import { Container, Navbar, Card } from "react-bootstrap";
 
 const posts = [
-  { title: "MetaFarmers.io", content: "Online multiplayer MMO, Crypto-Verse." },
-  { title: "Our Products", content: "Wallet,Exchange,Trade" },
-  { title: "Extra", content: "Terms,Privacy, BitTasker Inc" },
+  { title: "First Blog Post", content: "This is my first blog post!" },
+  { title: "Second Blog Post", content: "This is my second blog post!" },
 ];
 
 function App() {
