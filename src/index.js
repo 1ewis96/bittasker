@@ -9,7 +9,7 @@ import { AuthProvider } from "react-oidc-context";
 
 // OIDC configuration for Cognito
 const cognitoAuthConfig = {
-  authority: "https://auth.bittasker.xyz",  // Cognito hosted login page
+  authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_CdtrjKgCZ",  // Cognito hosted login page
   client_id: "1us07g33qbs5l00sdr1grcg2aj",  // Your App Client ID
   redirect_uri: "https://bittasker.xyz",  // The URL to redirect after login (use the root domain)
   response_type: "code",  // Authorization code flow
