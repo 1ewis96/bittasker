@@ -13,7 +13,7 @@ const cognitoAuthConfig = {
   client_id: "1us07g33qbs5l00sdr1grcg2aj",  // Your App Client ID
   redirect_uri: "https://bittasker.xyz",  // The URL to redirect after login (use the root domain)
   response_type: "code",  // Authorization code flow
-  scope: "openid profile email",  // Scopes to request
+  scope: "email openid phone",  // Scopes to request
   post_logout_redirect_uri: "https://bittasker.xyz",  // The URL to redirect after logout (use the root domain)
 };
 
