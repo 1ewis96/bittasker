@@ -6,10 +6,10 @@ import logo from "./logo.png"; // Import your favicon (ensure it's in the src fo
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
-  { title: "MetaFarmers", content: "Join Now!", backgroundIamge: "https://google.com/logo.jpg" },
-  { title: "Resources", content: "Wallet, Buy, Sell & Exchange." },
-    { title: "Other", content: "Restore, Secrets & Backup." },
-  { title: "Documentation", content: "API & WSS Documentation, Terms & Privacy." }
+  { title: "MetaFarmers", content: "Join Now!", backgroundImage: "/assets/background.gif" },
+  { title: "Resources", content: "Wallet, Buy, Sell & Exchange.", backgroundImage: "/assets/background.gif" },
+    { title: "Other", content: "Restore, Secrets & Backup.", backgroundImage: "/assets/background.gif" },
+  { title: "Documentation", content: "API & WSS Documentation, Terms & Privacy.", backgroundImage: "/assets/background.gif" }
 ]; 
 
 
