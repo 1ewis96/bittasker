@@ -6,7 +6,7 @@ import logo from "./logo.png"; // Import your favicon (ensure it's in the src fo
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
-  { title: "MetaFarmers", content: "Join Now!" },
+  { title: "MetaFarmers", content: "Join Now!", backgroundIamge: "https://google.com/logo.jpg" },
   { title: "Resources", content: "Wallet, Buy, Sell & Exchange." },
     { title: "Other", content: "Restore, Secrets & Backup." },
   { title: "Documentation", content: "API & WSS Documentation, Terms & Privacy." }
@@ -73,17 +73,27 @@ function App() {
       <HeroSection /> {/* Use the component here */}
     </div>
 
-      <Container className="mt-4">
-        {/* Display posts */}
-        {posts.map((post, index) => (
-          <Card key={index} className="mb-3">
-            <Card.Body>
-              <Card.Title>{post.title}</Card.Title>
-              <Card.Text>{post.content}</Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
-      </Container>
+<Container className="mt-4">
+  {/* Display posts */}
+  {posts.map((post, index) => (
+    <Card 
+      key={index} 
+      className="mb-3 text-white" 
+      style={{ 
+        backgroundImage: `url(${post.backgroundImage})`, 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center',
+        minHeight: '150px' 
+      }}
+    >
+      <Card.Body style={{ background: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px', padding: '1rem' }}>
+        <Card.Title>{post.title}</Card.Title>
+        <Card.Text>{post.content}</Card.Text>
+      </Card.Body>
+    </Card>
+  ))}
+</Container>
+
 
       <div>
         {/* Buttons for Sign In and Sign Out */}
