@@ -7,10 +7,11 @@ import logo from "./logo.png"; // Import your favicon (ensure it's in the src fo
 // Example posts (you can customize this part based on your app's content)
 const posts = [
   { title: "MetaFarmers", content: "Join Now!" },
-  { title: "Resources", content: "Wallet & Exchange" },
-    { title: "Other", content: "Restore" },
-  { title: "Extra", content: "Backup" }
-];
+  { title: "Resources", content: "Wallet, Buy, Sell & Exchange." },
+    { title: "Other", content: "Restore, Secrets & Backup." },
+  { title: "Documentation", content: "API & WSS Documentation, Terms & Privacy." }
+]; 
+
 
 function App() {
   const auth = useAuth();
