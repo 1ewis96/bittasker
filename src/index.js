@@ -4,16 +4,29 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { AuthProvider } from "react-oidc-context";
 
 
+// OIDC configuration for Cognito
+const cognitoAuthConfig = {
+  authority: "https://auth.bittasker.xyz.auth.us-east-1.amazoncognito.com",  // Cognito hosted login page
+  client_id: "1us07g33qbs5l00sdr1grcg2aj",  // Your App Client ID
+  redirect_uri: "https://bittasker.xyz",  // The URL to redirect after login (use the root domain)
+  response_type: "code",  // Authorization code flow
+  scope: "openid profile email",  // Scopes to request
+  post_logout_redirect_uri: "https://bittasker.xyz",  // The URL to redirect after logout (use the root domain)
+};
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Wrap the app with the AuthProvider to handle authentication
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider {...cognitoAuthConfig}>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
-
 
 
 
