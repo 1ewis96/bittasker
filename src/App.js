@@ -4,8 +4,10 @@ import { useAuth } from "react-oidc-context";
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
-  { title: "First Blog Post", content: "This is my first blog post!" },
-  { title: "Second Blog Post", content: "This is my second blog post!" },
+  { title: "MetaFarmers", content: "Join Now!" },
+  { title: "Resources", content: "Wallet & Exchange" },
+    { title: "Other", content: "Restore" },
+  { title: "Extra", content: "Backup" }
 ];
 
 function App() {
