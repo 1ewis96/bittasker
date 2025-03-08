@@ -1,6 +1,8 @@
 import React from "react";
 import { Container, Navbar, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
+import HeroSection from "./HeroSection"; // Import the component
+
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
@@ -56,6 +58,10 @@ function App() {
           <Navbar.Brand href="#">BitTasker</Navbar.Brand>
         </Container>
       </Navbar>
+	  
+	 <div>
+      <HeroSection /> {/* Use the component here */}
+    </div>
 
       <Container className="mt-4">
         {/* Display posts */}
