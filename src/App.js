@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Navbar, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
-import logo from "./logo.svg"; // Import your favicon (ensure it's in the src folder or adjust the path)
+import logo from "./logo.png"; // Import your favicon (ensure it's in the src folder or adjust the path)
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
