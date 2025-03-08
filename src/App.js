@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Navbar, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 
+// Example posts (you can customize this part based on your app's content)
 const posts = [
   { title: "First Blog Post", content: "This is my first blog post!" },
   { title: "Second Blog Post", content: "This is my second blog post!" },
@@ -10,24 +11,27 @@ const posts = [
 function App() {
   const auth = useAuth();
 
+  // This function redirects the user to the Cognito logout endpoint
   const signOutRedirect = () => {
     const clientId = "1us07g33qbs5l00sdr1grcg2aj"; // Your App Client ID
     const logoutUri = "https://bittasker.xyz"; // Redirect after logout (root domain)
     const cognitoDomain = "https://auth.bittasker.xyz.auth.us-east-1.amazoncognito.com";
+    
+    // Redirect user to Cognito logout
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
   };
 
-  // Loading state
+  // Loading state while authentication is in progress
   if (auth.isLoading) {
     return <div>Loading...</div>;
   }
 
-  // Error state
+  // Error state if there was an error during authentication
   if (auth.error) {
     return <div>Error: {auth.error.message}</div>;
   }
 
-  // Authenticated state
+  // Authenticated state - show user profile information and tokens
   if (auth.isAuthenticated) {
     return (
       <div>
@@ -36,12 +40,13 @@ function App() {
         <pre>Access Token: {auth.user?.access_token}</pre>
         <pre>Refresh Token: {auth.user?.refresh_token}</pre>
 
+        {/* Button to sign out */}
         <button onClick={() => auth.removeUser()}>Sign out</button>
       </div>
     );
   }
 
-  // If not authenticated, show the main page
+  // If not authenticated, show the main page with posts
   return (
     <>
       <Navbar bg="dark" variant="dark">
@@ -51,6 +56,7 @@ function App() {
       </Navbar>
 
       <Container className="mt-4">
+        {/* Display posts */}
         {posts.map((post, index) => (
           <Card key={index} className="mb-3">
             <Card.Body>
@@ -62,6 +68,7 @@ function App() {
       </Container>
 
       <div>
+        {/* Buttons for Sign In and Sign Out */}
         <button onClick={() => auth.signinRedirect()}>Sign in</button>
         <button onClick={signOutRedirect}>Sign out</button>
       </div>
