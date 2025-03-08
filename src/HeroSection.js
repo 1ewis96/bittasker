@@ -6,7 +6,7 @@ const HeroSection = () => {
       <div className="col-md-6 p-lg-5 mx-auto my-5">
         <h1 className="display-3 fw-bold">MetaFarmers</h1>
         <h3 className="fw-normal text-light mb-3">
-         Explore & Navigate.
+         Explore & Have Fun!
         </h3>
         <div className="d-flex gap-3 justify-content-center lead fw-normal">
           <a className="icon-link text-light" href="#">
