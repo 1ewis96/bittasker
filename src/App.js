@@ -6,10 +6,7 @@ import logo from "./logo.png"; // Import your favicon (ensure it's in the src fo
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
-  { title: "MetaFarmers", content: "Join Now!", backgroundImage: "/assets/background.gif" },
-  { title: "Resources", content: "Wallet, Buy, Sell & Exchange.", backgroundImage: "/assets/background.gif" },
-    { title: "Other", content: "Restore, Secrets & Backup.", backgroundImage: "/assets/background.gif" },
-  { title: "Documentation", content: "API & WSS Documentation, Terms & Privacy.", backgroundImage: "/assets/background.gif" }
+  { title: "MetaFarmers", content: "Join Now!", backgroundImage: "/assets/background.gif", link: "https://metafarmers.io"},
 ]; 
 
 
@@ -74,25 +71,33 @@ function App() {
     </div>
 
 <Container className="mt-4">
-  {/* Display posts */}
   {posts.map((post, index) => (
-    <Card 
+    <a 
       key={index} 
-      className="mb-3 text-white" 
-      style={{ 
-        backgroundImage: `url(${post.backgroundImage})`, 
-        backgroundSize: 'cover', 
-        backgroundPosition: 'center',
-        minHeight: '150px' 
-      }}
+      href={post.link} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      style={{ textDecoration: 'none' }}
     >
-      <Card.Body style={{ background: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px', padding: '1rem' }}>
-        <Card.Title>{post.title}</Card.Title>
-        <Card.Text>{post.content}</Card.Text>
-      </Card.Body>
-    </Card>
+      <Card 
+        className="mb-3 text-white" 
+        style={{ 
+          backgroundImage: `url(${post.backgroundImage})`, 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          minHeight: '150px', 
+          cursor: 'pointer'
+        }}
+      >
+        <Card.Body style={{ background: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px', padding: '1rem' }}>
+          <Card.Title>{post.title}</Card.Title>
+          <Card.Text>{post.content}</Card.Text>
+        </Card.Body>
+      </Card>
+    </a>
   ))}
 </Container>
+
 
 
       <div>
