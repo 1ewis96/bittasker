@@ -2,8 +2,9 @@ import React from "react";
 import { Container, Navbar, Card } from "react-bootstrap";
 
 const posts = [
-  { title: "First Blog Post", content: "This is my first blog post!" },
-  { title: "Second Blog Post", content: "This is my second blog post!" },
+  { title: "MetaFarmers.io", content: "Online multiplayer MMO, Crypto-Verse." },
+  { title: "Our Products", content: "Wallet,Exchange,Trade" },
+  { title: "Extra", content: "Terms,Privacy, BitTasker Inc" },
 ];
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#">My React Blog</Navbar.Brand>
+          <Navbar.Brand href="#">BitTasker</Navbar.Brand>
         </Container>
       </Navbar>
 
