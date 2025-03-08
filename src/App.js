@@ -15,7 +15,7 @@ function App() {
   const signOutRedirect = () => {
     const clientId = "1us07g33qbs5l00sdr1grcg2aj"; // Your App Client ID
     const logoutUri = "https://bittasker.xyz"; // Redirect after logout (root domain)
-    const cognitoDomain = "https://auth.bittasker.xyz.auth.us-east-1.amazoncognito.com";
+    const cognitoDomain = "https://auth.bittasker.xyz";
     
     // Redirect user to Cognito logout
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
