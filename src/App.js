@@ -31,6 +31,7 @@ const ValidateCognito = async () => {
     }
 
     const idToken = auth.user?.id_token;
+	
     if (!idToken) {
       setResponseMessage("ID Token not found");
       return;
@@ -39,12 +40,11 @@ const ValidateCognito = async () => {
     const apiEndpoint = "https://api.bittasker.xyz/cognito/auth";
 
     // Main request (without the OPTIONS preflight)
-    const response = await axios.post(apiEndpoint, { id_token: idToken }, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+	const response = await axios.post(apiEndpoint, JSON.stringify({ id_token: idToken }), {
+	  headers: {
+		'Content-Type': 'application/json',
+	  },
+	});
 
     setResponseMessage(response.data.message);
   } catch (error) {
