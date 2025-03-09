@@ -25,7 +25,6 @@ function App() {
 // Function to send id_token to your API Gateway
 const ValidateCognito = async () => {
   try {
-    // Make sure user is authenticated
     if (!auth.isAuthenticated) {
       setResponseMessage("User not authenticated");
       return;
@@ -37,29 +36,28 @@ const ValidateCognito = async () => {
       return;
     }
 
-    const apiEndpoint = "https://api.bittasker.xyz/cognito/auth"; // Replace with your API Gateway URL
+    const apiEndpoint = "https://api.bittasker.xyz/cognito/auth";
 
-    // Call the Lambda function through API Gateway
-    const response = await axios.post(apiEndpoint, {
-      id_token: idToken, // Pass the id_token to the API
-    }, {
-      withCredentials: true,  // Ensure credentials are sent if needed
+    // Preflight request (Optional, but helpful)
+    await axios.options(apiEndpoint, {
       headers: {
-        'Content-Type': 'application/json', // Ensure the content-type is set correctly
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'Content-Type, Authorization',
       }
     });
 
-    setResponseMessage(response.data.message); // Set the response message from Lambda
+    // Main request
+    const response = await axios.post(apiEndpoint, { id_token: idToken }, {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    setResponseMessage(response.data.message);
   } catch (error) {
     console.error("Error calling API:", error);
-
-    if (error.response) {
-      setResponseMessage("Error: " + error.response.data.message || error.response.statusText);
-    } else if (error.request) {
-      setResponseMessage("Error: No response received from the server");
-    } else {
-      setResponseMessage("Error: " + error.message);
-    }
+    setResponseMessage(error.response?.data?.message || "Request failed");
   }
 };
 
