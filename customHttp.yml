@@ -1,0 +1,6 @@
+headers:
+  - pattern: "/*"
+    headers:
+      Access-Control-Allow-Origin: "https://bittasker.xyz"
+      Access-Control-Allow-Credentials: "true"
+      Access-Control-Allow-Headers: "Content-Type, Authorization"

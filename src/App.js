@@ -37,7 +37,7 @@ const ValidateCognito = async () => {
       return;
     }
 
-    const apiEndpoint = "https://axsrhkt5nl.execute-api.us-east-1.amazonaws.com/prod/cognito/auth"; // Replace with your API Gateway URL
+    const apiEndpoint = "https://api.bittasker.xyz/cognito/auth"; // Replace with your API Gateway URL
 
     // Call the Lambda function through API Gateway
     const response = await axios.post(apiEndpoint, {
