@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+
 import { Container, Navbar, Card} from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
 import Navi from "./Navbar"; // Import the component
 import Footer from "./Footer"; // Import the component
 
-const [responseMessage, setResponseMessage] = useState("");
+
+function App() {
+  const auth = useAuth();
+  const [responseMessage, setResponseMessage] = useState("");
+
+  // This function redirects the user to the Cognito logout endpoint
+  const signOutRedirect = () => {
+    const clientId = "1us07g33qbs5l00sdr1grcg2aj"; // Your App Client ID
+    const logoutUri = "https://bittasker.xyz"; // Redirect after logout (root domain)
+    const cognitoDomain = "https://auth.bittasker.xyz";
+    
+    // Redirect user to Cognito logout
+    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
+  };
 
 // Function to send id_token to your API Gateway
 const ValidateCognito = async () => {
@@ -42,20 +56,6 @@ const posts = [
 	{title: "Docs", link: "https://cdn.bittasker.xyz" },
 		{title: "Wallet", link: "https://wallet.bittasker.xyz"}
 		]; 
-
-
-function App() {
-  const auth = useAuth();
-
-  // This function redirects the user to the Cognito logout endpoint
-  const signOutRedirect = () => {
-    const clientId = "1us07g33qbs5l00sdr1grcg2aj"; // Your App Client ID
-    const logoutUri = "https://bittasker.xyz"; // Redirect after logout (root domain)
-    const cognitoDomain = "https://auth.bittasker.xyz";
-    
-    // Redirect user to Cognito logout
-    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
-  };
 
   // Loading state while authentication is in progress
   if (auth.isLoading) {
