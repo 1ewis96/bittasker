@@ -10,7 +10,7 @@ const links = [
 ];
 
 const Footer = () => {
-  return (
+  return ( 
     <Container className="mt-4">
       <div style={{ display: "flex", gap: "15px", alignItems: "center", flexWrap: "wrap" }}>
         {links.map((link, index) => (
