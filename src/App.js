@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 import { Container, Navbar, Card} from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
@@ -72,7 +73,7 @@ const posts = [
     return (
       <div>
 	  
-	  <button onClick={callApi}>Authenticate User</button>
+	  <button onClick={ValidateCognito}>Authenticate User</button>
 
 		<div>{responseMessage}</div>
 
