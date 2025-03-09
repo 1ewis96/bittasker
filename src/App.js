@@ -5,6 +5,37 @@ import HeroSection from "./HeroSection"; // Import the component
 import Navi from "./Navbar"; // Import the component
 import Footer from "./Footer"; // Import the component
 
+const [responseMessage, setResponseMessage] = useState("");
+
+// Function to send id_token to your API Gateway
+const ValidateCognito = async () => {
+  try {
+    // Make sure user is authenticated
+    if (!auth.isAuthenticated) {
+      setResponseMessage("User not authenticated");
+      return;
+    }
+
+    const idToken = auth.user?.id_token;
+    if (!idToken) {
+      setResponseMessage("ID Token not found");
+      return;
+    }
+
+    const apiEndpoint = "https://api.bittasker.xyz/cognito/auth"; // Replace with your API Gateway URL
+
+    // Call the Lambda function through API Gateway
+    const response = await axios.post(apiEndpoint, {
+      id_token: idToken, // Pass the id_token to the API
+    });
+
+    setResponseMessage(response.data.message); // Set the response message from Lambda
+  } catch (error) {
+    console.error("Error calling API:", error);
+    setResponseMessage("Error: " + error.message);
+  }
+};
+
 // Example posts (you can customize this part based on your app's content)
 const posts = [
 { title: "Github", link: "https://github.com/" },
@@ -59,7 +90,9 @@ function App() {
 	 <div>
       <HeroSection /> {/* Use the component here */}
     </div>
+<button onClick={callApi}>Authenticate User</button>
 
+<div>{responseMessage}</div>
 <Container className="mt-4">
       <Footer /> {/* Use the component here */}
 </Container>
