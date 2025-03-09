@@ -2,8 +2,8 @@ import React from "react";
 import { Container, Navbar, Card} from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
+import Navi from "./Navbar"; // Import the component
 import Footer from "./Footer"; // Import the component
-import logo from "./logo.png"; // Import your favicon (ensure it's in the src folder or adjust the path)
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
@@ -54,20 +54,7 @@ function App() {
   // If not authenticated, show the main page with posts
   return (
     <>
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand href="#">
-          <img
-            src={logo}
-            alt="Logo"
-            width="30"
-            height="30"
-            className="d-inline-block align-top me-2"
-          />
-          BitTasker
-        </Navbar.Brand>
-      </Container>
-    </Navbar>
+      <Navi /> {/* Use the component here */}
 	  
 	 <div>
       <HeroSection /> {/* Use the component here */}
