@@ -2,12 +2,15 @@ import React from "react";
 import { Container, Navbar, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
+import Footer from "./Footer"; // Import the component
 import logo from "./logo.png"; // Import your favicon (ensure it's in the src folder or adjust the path)
 
 // Example posts (you can customize this part based on your app's content)
 const posts = [
-  { title: "MetaFarmers", content: "Join Now!", backgroundImage: "/assets/background.gif", link: "https://metafarmers.io"},
-]; 
+{ title: "Github", link: "https://github.com/" },
+	{title: "Docs", link: "https://cdn.bittasker.xyz" },
+		{title: "Wallet", link: "https://wallet.bittasker.xyz"}
+		]; 
 
 
 function App() {
@@ -71,31 +74,7 @@ function App() {
     </div>
 
 <Container className="mt-4">
-  {posts.map((post, index) => (
-    <a 
-      key={index} 
-      href={post.link} 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      style={{ textDecoration: 'none' }}
-    >
-      <Card 
-        className="mb-3 text-white" 
-        style={{ 
-          backgroundImage: `url(${post.backgroundImage})`, 
-          backgroundSize: 'cover', 
-          backgroundPosition: 'center',
-          minHeight: '150px', 
-          cursor: 'pointer'
-        }}
-      >
-        <Card.Body style={{ background: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px', padding: '1rem' }}>
-          <Card.Title>{post.title}</Card.Title>
-          <Card.Text>{post.content}</Card.Text>
-        </Card.Body>
-      </Card>
-    </a>
-  ))}
+      <Footer /> {/* Use the component here */}
 </Container>
 
 
