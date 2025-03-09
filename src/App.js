@@ -43,7 +43,6 @@ const ValidateCognito = async () => {
     const response = await axios.post(apiEndpoint, {
       id_token: idToken, // Pass the id_token to the API
     }, {
-      // Add credentials to the request (use withCredentials)
       withCredentials: true,  // Ensure credentials are sent if needed
       headers: {
         'Content-Type': 'application/json', // Ensure the content-type is set correctly
@@ -54,15 +53,11 @@ const ValidateCognito = async () => {
   } catch (error) {
     console.error("Error calling API:", error);
 
-    // Improve error message handling to give more detailed info
     if (error.response) {
-      // Server responded with a status code outside of 2xx
       setResponseMessage("Error: " + error.response.data.message || error.response.statusText);
     } else if (error.request) {
-      // No response was received from the server
       setResponseMessage("Error: No response received from the server");
     } else {
-      // Other errors
       setResponseMessage("Error: " + error.message);
     }
   }
