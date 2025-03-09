@@ -71,6 +71,12 @@ function App() {
   if (auth.isAuthenticated) {
     return (
       <div>
+	  
+	  <button onClick={callApi}>Authenticate User</button>
+
+		<div>{responseMessage}</div>
+
+
         <pre>Hello: {auth.user?.profile.email}</pre>
         <pre>ID Token: {auth.user?.id_token}</pre>
         <pre>Access Token: {auth.user?.access_token}</pre>
@@ -90,9 +96,7 @@ function App() {
 	 <div>
       <HeroSection /> {/* Use the component here */}
     </div>
-<button onClick={callApi}>Authenticate User</button>
 
-<div>{responseMessage}</div>
 <Container className="mt-4">
       <Footer /> {/* Use the component here */}
 </Container>
