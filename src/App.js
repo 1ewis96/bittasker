@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Navbar, Card } from "react-bootstrap";
+import { Container, Navbar, Card} from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
 import Footer from "./Footer"; // Import the component
