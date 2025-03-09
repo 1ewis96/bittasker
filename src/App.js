@@ -38,15 +38,7 @@ const ValidateCognito = async () => {
 
     const apiEndpoint = "https://api.bittasker.xyz/cognito/auth";
 
-    // Preflight request (Optional, but helpful)
-    await axios.options(apiEndpoint, {
-      headers: {
-        'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'Content-Type, Authorization',
-      }
-    });
-
-    // Main request
+    // Main request (without the OPTIONS preflight)
     const response = await axios.post(apiEndpoint, { id_token: idToken }, {
       withCredentials: true,
       headers: {
