@@ -40,11 +40,17 @@ const ValidateCognito = async () => {
     const apiEndpoint = "https://api.bittasker.xyz/cognito/auth";
 
     // Main request (without the OPTIONS preflight)
-	const response = await axios.post(apiEndpoint, JSON.stringify({ id_token: idToken }), {
-	  headers: {
-		'Content-Type': 'application/json',
-	  },
-	});
+		const response = await axios.post(apiEndpoint, 
+		  JSON.stringify({ id_token: idToken }), 
+		  {
+			headers: {
+			  'Content-Type': 'application/json',
+			  'Accept': 'application/json',  // Ensures response is JSON
+			  'Origin': window.location.origin,  // Helps with CORS validation
+			},
+		  }
+		);
+
 
     setResponseMessage(response.data.message);
   } catch (error) {
