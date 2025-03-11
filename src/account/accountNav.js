@@ -70,7 +70,7 @@ const AccountNav = () => {
         <Dropdown.Item onClick={() => window.location.href = '/settings'}>
           Settings
         </Dropdown.Item>
-		        <Dropdown.Item onClick={() => auth.signOutRedirect()}>
+		        <Dropdown.Item onClick={() => signOutRedirect()}>
           Sign Out
         </Dropdown.Item>
               </Dropdown.Menu>
