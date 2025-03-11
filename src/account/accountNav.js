@@ -56,19 +56,26 @@ const AccountNav = () => {
   </Dropdown.Item>
   
   <Dropdown.Item disabled>
-    <pre>Hello: {auth.user?.profile.email}</pre>
+    <pre style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      Hello: {auth.user?.profile.email}
+    </pre>
   </Dropdown.Item>
   <Dropdown.Item disabled>
-    <pre>ID Token: {auth.user?.id_token}</pre>
+    <pre style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      ID Token: {auth.user?.id_token}
+    </pre>
   </Dropdown.Item>
   <Dropdown.Item disabled>
-    <pre>Access Token: {auth.user?.access_token}</pre>
+    <pre style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      Access Token: {auth.user?.access_token}
+    </pre>
   </Dropdown.Item>
   <Dropdown.Item disabled>
-    <pre>Refresh Token: {auth.user?.refresh_token}</pre>
+    <pre style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      Refresh Token: {auth.user?.refresh_token}
+    </pre>
   </Dropdown.Item>
 </Dropdown.Menu>
-
             </Dropdown>
           </Nav>
         </Navbar.Collapse>
