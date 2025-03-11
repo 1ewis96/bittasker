@@ -24,7 +24,7 @@ const HeroSection = () => {
             </svg>
           </a>
         </div>
-      </div>
+
 
 <a href="https://apps.apple.com" className="app-store-button">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -33,7 +33,7 @@ const HeroSection = () => {
       <span>Download on the</span>
       <strong>App Store</strong>
     </a>
-
+      </div>
     </div>
   );
 };
