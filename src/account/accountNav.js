@@ -48,13 +48,6 @@ const AccountNav = () => {
                 />
               </Dropdown.Toggle>
 <Dropdown.Menu>
-  <Dropdown.Item onClick={() => window.location.href = '/settings'}>
-    Settings
-  </Dropdown.Item>
-  <Dropdown.Item onClick={() => auth.removeUser()}>
-    Sign Out
-  </Dropdown.Item>
-  
   <Dropdown.Item disabled>
     <pre style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
       Hello: {auth.user?.profile.email}
@@ -74,6 +67,12 @@ const AccountNav = () => {
     <pre style={{ width: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
       Refresh Token: {auth.user?.refresh_token}
     </pre>
+  </Dropdown.Item>
+    <Dropdown.Item onClick={() => window.location.href = '/settings'}>
+    Settings
+  </Dropdown.Item>
+  <Dropdown.Item onClick={() => auth.removeUser()}>
+    Sign Out
   </Dropdown.Item>
 </Dropdown.Menu>
             </Dropdown>
