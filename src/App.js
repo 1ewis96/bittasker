@@ -102,14 +102,10 @@ const posts = [
         <pre>Access Token: {auth.user?.access_token}</pre>
         <pre>Refresh Token: {auth.user?.refresh_token}</pre>
 
-        {/* Button to sign out */}
-        <button onClick={() => auth.removeUser()}>Sign out</button>
+
       </div>
 
-      <div>
-        {/* Buttons for Sign In and Sign Out */}
-        <button onClick={() => auth.signinRedirect()}>Sign in</button>
-      </div>
+   
     </>
     );
   }
@@ -128,11 +124,6 @@ const posts = [
 </Container>
 
 
-
-      <div>
-        {/* Buttons for Sign In and Sign Out */}
-        <button onClick={() => auth.signinRedirect()}>Sign in</button>
-      </div>
     </>
   );
 }

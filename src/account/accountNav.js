@@ -17,16 +17,6 @@ const AccountNav = () => {
 	
 	  const auth = useAuth();
 	  
-	   const signOutRedirect = () => {
-		const clientId = "1us07g33qbs5l00sdr1grcg2aj"; // Your App Client ID
-		const logoutUri = "https://bittasker.xyz"; // Redirect after logout (root domain)
-		const cognitoDomain = "https://auth.bittasker.xyz";
-		
-		// Redirect user to Cognito logout
-		window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
-	  };
-
-
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
@@ -70,7 +60,7 @@ const AccountNav = () => {
         <Dropdown.Item onClick={() => window.location.href = '/settings'}>
           Settings
         </Dropdown.Item>
-		        <Dropdown.Item onClick={() => signOutRedirect()}>
+		        <Dropdown.Item onClick={() => auth.removeUser()}>
           Sign Out
         </Dropdown.Item>
               </Dropdown.Menu>
