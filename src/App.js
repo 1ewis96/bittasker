@@ -13,16 +13,6 @@ function App() {
   const auth = useAuth();
   const [responseMessage, setResponseMessage] = useState("");
 
-  // This function redirects the user to the Cognito logout endpoint
-  const signOutRedirect = () => {
-    const clientId = "1us07g33qbs5l00sdr1grcg2aj"; // Your App Client ID
-    const logoutUri = "https://bittasker.xyz"; // Redirect after logout (root domain)
-    const cognitoDomain = "https://auth.bittasker.xyz";
-    
-    // Redirect user to Cognito logout
-    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
-  };
-
 // Function to send id_token to your API Gateway
 const ValidateCognito = async () => {
   try {
@@ -119,7 +109,6 @@ const posts = [
       <div>
         {/* Buttons for Sign In and Sign Out */}
         <button onClick={() => auth.signinRedirect()}>Sign in</button>
-        <button onClick={signOutRedirect}>Sign out</button>
       </div>
     </>
     );
@@ -143,7 +132,6 @@ const posts = [
       <div>
         {/* Buttons for Sign In and Sign Out */}
         <button onClick={() => auth.signinRedirect()}>Sign in</button>
-        <button onClick={signOutRedirect}>Sign out</button>
       </div>
     </>
   );
