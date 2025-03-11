@@ -4,7 +4,8 @@ import axios from 'axios';
 import { Container, Navbar, Card} from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
-import Navi from "./Navbar"; // Import the component
+import PublicNav from "./public/publicNav"; // Import the component
+import AccountNav from "./account/accountNavbar"; // Import the component
 import Footer from "./Footer"; // Import the component
 
 
@@ -88,7 +89,18 @@ const posts = [
   // Authenticated state - show user profile information and tokens
   if (auth.isAuthenticated) {
     return (
-      <div>
+	    <>
+      <AccountNav /> {/* Use the component here */}
+	  
+	 <div>
+      <HeroSection /> {/* Use the component here */}
+    </div>
+
+<Container className="mt-4">
+      <Footer /> {/* Use the component here */}
+</Container>
+
+	     <div>
 	  
 	  <button onClick={ValidateCognito}>Authenticate User</button>
 
@@ -103,13 +115,20 @@ const posts = [
         {/* Button to sign out */}
         <button onClick={() => auth.removeUser()}>Sign out</button>
       </div>
+
+      <div>
+        {/* Buttons for Sign In and Sign Out */}
+        <button onClick={() => auth.signinRedirect()}>Sign in</button>
+        <button onClick={signOutRedirect}>Sign out</button>
+      </div>
+    </>
     );
   }
 
   // If not authenticated, show the main page with posts
   return (
     <>
-      <Navi /> {/* Use the component here */}
+      <PublicNav /> {/* Use the component here */}
 	  
 	 <div>
       <HeroSection /> {/* Use the component here */}
