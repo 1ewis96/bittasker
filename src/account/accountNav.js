@@ -14,6 +14,9 @@ const links = [
 ];
 
 const AccountNav = () => {
+	
+	  const auth = useAuth();
+	  
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
