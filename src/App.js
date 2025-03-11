@@ -5,7 +5,7 @@ import { Container, Navbar, Card} from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import HeroSection from "./HeroSection"; // Import the component
 import PublicNav from "./public/publicNav"; // Import the component
-import AccountNav from "./account/accountNavbar"; // Import the component
+import AccountNav from "./account/accountNav"; // Import the component
 import Footer from "./Footer"; // Import the component
 
 
