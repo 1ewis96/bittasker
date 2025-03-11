@@ -48,7 +48,16 @@ const ValidateCognito = async () => {
 	  }
 	);
 
+    // Assuming sessionKey is returned in response.data.sessionKey
+    const sessionKey = response.data.sessionKey;
 
+    // Store the sessionKey in sessionStorage
+    if (sessionKey) {
+      sessionStorage.setItem("sessionKey", sessionKey);
+      setResponseMessage("Session Key saved successfully!");
+    } else {
+      setResponseMessage("Session Key not found in response.");
+    }
 
     setResponseMessage(response.data.message);
   } catch (error) {
