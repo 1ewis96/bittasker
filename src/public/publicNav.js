@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import logo from "/logo.png"; // Import your logo (ensure it's in the src folder or adjust the path)
-import profilePic from "./profile.jpg"; // Import your profile picture
+import profilePic from "/profile.jpg"; // Import your profile picture
 
 const links = [
   { title: "Map", link: "https://bittasker.xyz/map" },
