@@ -37,6 +37,8 @@ const ValidateCognito = async () => {
       return;
     }
 
+	const apiEndpoint = "https://api.bittasker.xyz/cognito/auth";
+
 	const response = await axios.post(apiEndpoint, 
 	  { id_token: idToken },  // ✅ Don't stringify manually
 	  {
