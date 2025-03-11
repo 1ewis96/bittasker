@@ -57,17 +57,17 @@ const PublicNav = () => {
                   }}
                 />
               </Dropdown.Toggle>
-			<Dropdown.Menu>
-					<Dropdown.Item onClick={() => auth.signinRedirect()}>
-					  <FaSignInAlt className="mr-2" /> Sign In
-					</Dropdown.Item>
-					<Dropdown.Item onClick={() => auth.signUpRedirect()}>
-					  <FaUserPlus className="mr-2" /> Sign Up
-					</Dropdown.Item>
-					<Dropdown.Item onClick={() => auth.forgotPassword()}>
-					  <FaLock className="mr-2" /> Forgot Password
-					</Dropdown.Item>
-				  </Dropdown.Menu>
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={() => auth.signinRedirect()}>
+          <FaSignInAlt className="mr-2" /> Sign In
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => window.location.href = 'https://auth.bittasker.xyz/signup?client_id=1us07g33qbs5l00sdr1grcg2aj&redirect_uri=https%3A%2F%2Fbittasker.xyz&response_type=code&scope=email+openid+phone&state=2004b957995146ffad1a8cacd00f25db&code_challenge=ymiOw4w2n8yyiZAbl9HykC_mDSJuOcL81g9K9R4fuRU&code_challenge_method=S256'}>
+          <FaUserPlus className="mr-2" /> Sign Up
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => window.location.href = 'https://auth.bittasker.xyz/forgotPassword?client_id=1us07g33qbs5l00sdr1grcg2aj&redirect_uri=https%3A%2F%2Fbittasker.xyz&response_type=code&scope=email+openid+phone&state=2004b957995146ffad1a8cacd00f25db&code_challenge=ymiOw4w2n8yyiZAbl9HykC_mDSJuOcL81g9K9R4fuRU&code_challenge_method=S256'}>
+          <FaLock className="mr-2" /> Forgot Password
+        </Dropdown.Item>
+      </Dropdown.Menu>
             </Dropdown>
           </Nav>
         </Navbar.Collapse>
