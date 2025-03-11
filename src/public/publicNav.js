@@ -2,7 +2,10 @@ import React from "react";
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import logo from "../logo.png"; // Import your logo (ensure it's in the src folder or adjust the path)
 import profilePic from "../profile.jpg"; // Import your profile picture
+import { useAuth } from "react-oidc-context";
 
+
+  
 const links = [
   { title: "Map", link: "https://bittasker.xyz/map" },
   { title: "Github", link: "https://github.com/" },
@@ -12,6 +15,9 @@ const links = [
 ];
 
 const PublicNav = () => {
+	
+  const auth = useAuth();
+	 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
@@ -52,10 +58,10 @@ const PublicNav = () => {
                 />
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="#"> <pre>Hello:</pre></Dropdown.Item>
-				<Dropdown.Item href="#"><pre>ID Token:</pre></Dropdown.Item>
-				<Dropdown.Item href="#"><pre>Access Token:</pre></Dropdown.Item>
-				<Dropdown.Item href="#"><pre>Refresh Token:</pre></Dropdown.Item>
+                <Dropdown.Item onClick={() => auth.signinRedirect()} >Sign In</Dropdown.Item>
+                <Dropdown.Item onClick={() => auth.signinRedirect()} >Sign Up</Dropdown.Item>
+				<Dropdown.Item href="#">Forgot Password</Dropdown.Item>
+
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
