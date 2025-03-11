@@ -13,52 +13,6 @@ function App() {
   const auth = useAuth();
   const [responseMessage, setResponseMessage] = useState("");
 
-// Function to send id_token to your API Gateway.
-const ValidateCognito = async () => {
-  try {
-    if (!auth.isAuthenticated) {
-      setResponseMessage("User not authenticated");
-      return;
-    }
-
-    const idToken = auth.user?.id_token;
-	
-    if (!idToken) {
-      setResponseMessage("ID Token not found");
-      return;
-    }
-
-	const apiEndpoint = "https://api.bittasker.xyz/cognito/auth";
-
-	const response = await axios.post(apiEndpoint, 
-	  { id_token: idToken },  // ✅ Don't stringify manually
-	  {
-		headers: {
-		  'Content-Type': 'application/json',
-		  'Accept': 'application/json',  // Ensures response is JSON
-		  'Origin': window.location.origin,  // Helps with CORS validation
-		},
-	  }
-	);
-
-    // Assuming sessionKey is returned in response.data.sessionKey
-    const sessionKey = response.data.sessionKey;
-
-    // Store the sessionKey in sessionStorage
-    if (sessionKey) {
-      sessionStorage.setItem("sessionKey", sessionKey);
-      setResponseMessage("Session Key saved successfully!");
-    } else {
-      setResponseMessage("Session Key not found in response.");
-    }
-
-    setResponseMessage(response.data.message);
-  } catch (error) {
-    console.error("Error calling API:", error);
-    setResponseMessage(error.response?.data?.message || "Request failed");
-  }
-};
-
   // Loading state while authentication is in progress.
   if (auth.isLoading) {
     return <div>Loading...</div>;
@@ -84,11 +38,6 @@ const ValidateCognito = async () => {
 </Container>
 
 	     <div>
-	  
-	  <button onClick={ValidateCognito}>Authenticate User</button>
-
-		<div>{responseMessage}</div>
-
 
         <pre>Hello: {auth.user?.profile.email}</pre>
         <pre>ID Token: {auth.user?.id_token}</pre>
@@ -96,7 +45,7 @@ const ValidateCognito = async () => {
         <pre>Refresh Token: {auth.user?.refresh_token}</pre>
 
 
-      </div>
+		</div>
 
    
     </>
