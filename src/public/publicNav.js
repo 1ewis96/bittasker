@@ -5,15 +5,6 @@ import profilePic from "../profile.jpg"; // Import your profile picture
 import { useAuth } from "react-oidc-context";
 import { FaSignInAlt, FaUserPlus, FaLock } from 'react-icons/fa'; 
 
-  
-const links = [
-  { title: "Map", link: "https://bittasker.xyz/map" },
-  { title: "Github", link: "https://github.com/" },
-  { title: "Docs", link: "https://cdn.bittasker.xyz" },
-  { title: "Wallet", link: "https://wallet.bittasker.xyz" },
-  { title: "Swap", link: "https://swap.bittasker.xyz" }
-];
-
 const PublicNav = () => {
 	
   const auth = useAuth();

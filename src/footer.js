@@ -5,8 +5,8 @@ const links = [
   { title: "Map", link: "https://bittasker.xyz/map" },
   { title: "Github", link: "https://github.com/" },
   { title: "Docs", link: "https://cdn.bittasker.xyz" },
-  { title: "Wallet", link: "https://wallet.bittasker.xyz" },
-  { title: "Swap", link: "https://swap.bittasker.xyz" }
+  { title: "Wallet", link: "https://bittasker.xyz/wallet" },
+  { title: "Swap", link: "https://bittasker.xyz/swap" }
 ];
 
 const Footer = () => {

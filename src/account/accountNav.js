@@ -4,15 +4,6 @@ import logo from "../logo.png"; // Import your logo (ensure it's in the src fold
 import profilePic from "../profile.jpg"; // Import your profile picture
 import { useAuth } from "react-oidc-context";
 
-
-const links = [
-  { title: "Map", link: "https://bittasker.xyz/map" },
-  { title: "Github", link: "https://github.com/" },
-  { title: "Docs", link: "https://cdn.bittasker.xyz" },
-  { title: "Wallet", link: "https://wallet.bittasker.xyz" },
-  { title: "Swap", link: "https://swap.bittasker.xyz" }
-];
-
 const AccountNav = () => {
 	
 	  const auth = useAuth();
