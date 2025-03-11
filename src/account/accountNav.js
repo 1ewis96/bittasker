@@ -65,4 +65,4 @@ const AccountNav = () => {
   );
 };
 
-export default Navi;
+export default AccountNav;
