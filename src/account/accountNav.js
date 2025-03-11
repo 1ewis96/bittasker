@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
-import logo from "../logo.png"; // Import your logo (ensure it's in the src folder or adjust the path)
-import profilePic from "../profile.jpg"; // Import your profile picture
+import logo from "../assets/logo.png"; // Import your logo (ensure it's in the src folder or adjust the path)
+import profilePic from "../assets/profile.jpg"; // Import your profile picture
 import { useAuth } from "react-oidc-context";
 
 const AccountNav = () => {
@@ -47,14 +47,28 @@ const AccountNav = () => {
                   }}
                 />
               </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.Item onClick={() => window.location.href = '/settings'}>
-          Settings
-        </Dropdown.Item>
-		        <Dropdown.Item onClick={() => auth.removeUser()}>
-          Sign Out
-        </Dropdown.Item>
-              </Dropdown.Menu>
+<Dropdown.Menu>
+  <Dropdown.Item onClick={() => window.location.href = '/settings'}>
+    Settings
+  </Dropdown.Item>
+  <Dropdown.Item onClick={() => auth.removeUser()}>
+    Sign Out
+  </Dropdown.Item>
+  
+  <Dropdown.Item disabled>
+    <pre>Hello: {auth.user?.profile.email}</pre>
+  </Dropdown.Item>
+  <Dropdown.Item disabled>
+    <pre>ID Token: {auth.user?.id_token}</pre>
+  </Dropdown.Item>
+  <Dropdown.Item disabled>
+    <pre>Access Token: {auth.user?.access_token}</pre>
+  </Dropdown.Item>
+  <Dropdown.Item disabled>
+    <pre>Refresh Token: {auth.user?.refresh_token}</pre>
+  </Dropdown.Item>
+</Dropdown.Menu>
+
             </Dropdown>
           </Nav>
         </Navbar.Collapse>

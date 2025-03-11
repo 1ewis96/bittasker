@@ -13,7 +13,7 @@ function App() {
   const auth = useAuth();
   const [responseMessage, setResponseMessage] = useState("");
 
-// Function to send id_token to your API Gateway
+// Function to send id_token to your API Gateway.
 const ValidateCognito = async () => {
   try {
     if (!auth.isAuthenticated) {
@@ -59,24 +59,17 @@ const ValidateCognito = async () => {
   }
 };
 
-// Example posts (you can customize this part based on your app's content)
-const posts = [
-{ title: "Github", link: "https://github.com/" },
-	{title: "Docs", link: "https://cdn.bittasker.xyz" },
-		{title: "Wallet", link: "https://wallet.bittasker.xyz"}
-		]; 
-
-  // Loading state while authentication is in progress
+  // Loading state while authentication is in progress.
   if (auth.isLoading) {
     return <div>Loading...</div>;
   }
 
-  // Error state if there was an error during authentication
+  // Error state if there was an error during authentication.
   if (auth.error) {
     return <div>Error: {auth.error.message}</div>;
   }
 
-  // Authenticated state - show user profile information and tokens
+  // Authenticated state.
   if (auth.isAuthenticated) {
     return (
 	    <>
@@ -110,7 +103,7 @@ const posts = [
     );
   }
 
-  // If not authenticated, show the main page with posts
+  // Uunauthenticated state.
   return (
     <>
       <PublicNav /> {/* Use the component here */}
