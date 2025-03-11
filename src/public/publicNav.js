@@ -3,7 +3,7 @@ import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import logo from "../logo.png"; // Import your logo (ensure it's in the src folder or adjust the path)
 import profilePic from "../profile.jpg"; // Import your profile picture
 import { useAuth } from "react-oidc-context";
-
+import { FaSignInAlt, FaUserPlus, FaLock } from 'react-icons/fa'; 
 
   
 const links = [
@@ -57,12 +57,17 @@ const PublicNav = () => {
                   }}
                 />
               </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => auth.signinRedirect()} >Sign In</Dropdown.Item>
-                <Dropdown.Item onClick={() => auth.signinRedirect()} >Sign Up</Dropdown.Item>
-				<Dropdown.Item href="#">Forgot Password</Dropdown.Item>
-
-              </Dropdown.Menu>
+			<Dropdown.Menu>
+					<Dropdown.Item onClick={() => auth.signinRedirect()}>
+					  <FaSignInAlt className="mr-2" /> Sign In
+					</Dropdown.Item>
+					<Dropdown.Item onClick={() => auth.signUpRedirect()}>
+					  <FaUserPlus className="mr-2" /> Sign Up
+					</Dropdown.Item>
+					<Dropdown.Item onClick={() => auth.forgotPassword()}>
+					  <FaLock className="mr-2" /> Forgot Password
+					</Dropdown.Item>
+				  </Dropdown.Menu>
             </Dropdown>
           </Nav>
         </Navbar.Collapse>
