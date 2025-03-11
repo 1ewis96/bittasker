@@ -8,15 +8,6 @@ import Footer from "../pages/Footer"; // Import the component
 const Home = () => {
 
 const auth = useAuth();
-  // Loading state while authentication is in progress.
-  if (auth.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // Error state if there was an error during authentication.
-  if (auth.error) {
-    return <div>Error: {auth.error.message}</div>;
-  }
 
   // Authenticated state.
   if (auth.isAuthenticated) {
