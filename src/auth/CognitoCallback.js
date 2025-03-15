@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios
 
 const CognitoCallback = () => {
   const auth = useAuth(); // Get the auth context
@@ -9,28 +10,34 @@ const CognitoCallback = () => {
   const [errorMessage, setErrorMessage] = useState(""); // To store error messages if any
 
   useEffect(() => {
+    // Early return if auth is loading or there is an authentication error
+    if (auth.isLoading) {
+      return;
+    }
+
     const authenticateUser = async () => {
       // Ensure the user is authenticated before calling the API
-      if (auth.isAuthenticated) {
+      if (auth.isAuthenticated && auth.idToken) {
         try {
           // Prepare the request payload with the id_token
           const idToken = auth.idToken; // Get the id_token from the auth context
 
-          // Call the API
-          const response = await fetch("https://api.bittasker.xyz/cognito/auth", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+          // Call the API using Axios
+          const response = await axios.post(
+            "https://api.bittasker.xyz/cognito/auth",
+            {
               id_token: idToken,
-            }),
-          });
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
-          // Check if the API call was successful (HTTP status 200)
-          if (response.ok) {
-            // Parse the response body if needed
-            const data = await response.json();
+          // If the response is successful
+          if (response.status === 200) {
+            const data = response.data;
 
             // If the response contains specific success data, proceed
             if (data.message === "User verified") {
@@ -41,9 +48,8 @@ const CognitoCallback = () => {
               setErrorMessage("Unexpected response from the server.");
             }
           } else {
-            // If the response was not ok (e.g., 4xx or 5xx status)
-            const errorData = await response.json();
-            setErrorMessage(errorData.message || "API call failed.");
+            // Handle unsuccessful response (non-200 status)
+            setErrorMessage("API call failed with status: " + response.status);
           }
         } catch (error) {
           console.error("Error during API call:", error);
@@ -52,28 +58,31 @@ const CognitoCallback = () => {
           // Stop loading after the operation finishes
           setLoading(false);
         }
+      } else {
+        setErrorMessage("Authentication failed or missing ID token.");
+        setLoading(false);
       }
     };
 
-    // Trigger the authentication check and API call once the auth state is ready
-    if (!auth.isLoading && !auth.error) {
-      authenticateUser();
-    }
-  }, [auth.isAuthenticated, auth.idToken, auth.isLoading, auth.error, navigate]);
+    authenticateUser();
+  }, [auth.isAuthenticated, auth.idToken, auth.isLoading, navigate]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
+  // Handle error states
   if (auth.error) {
     return <div>Error: {auth.error.message}</div>;
   }
 
+  // Show loading indicator while waiting for authentication to complete
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // Show error message if any
   if (errorMessage) {
     return <div>Error: {errorMessage}</div>;
   }
 
-  // Show the page while processing the authentication and API call
+  // Success state (redirecting or other actions are handled in useEffect)
   return <div>Creating session...</div>;
 };
 
