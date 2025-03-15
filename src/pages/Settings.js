@@ -3,12 +3,13 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import { useSecureFunction } from "your-secure-function-hook"; // Replace with the correct import
+import { useSecureFunction } from "../hooks/useSecureFunction"; // Replace with actual import
 import axios from "axios";
 
 const Settings = () => {
   const auth = useAuth();
   const apiUrl = process.env.REACT_APP_HOST_API_URL;
+  const s3Url = process.env.REACT_APP_S3_URL; // Get the S3 URL from the env variables
   const avatarAPI = `${apiUrl}/profile/avatar/`;
 
   const [avatars, setAvatars] = useState([]);
@@ -78,7 +79,7 @@ const Settings = () => {
                   >
                     <Card.Img
                       variant="top"
-                      src={`${apiUrl}/avatars/${avatar.path}`} // Assuming avatar images are stored in a specific folder
+                      src={`${s3Url}/${avatar.path}`} // Prefix with the S3 URL
                       alt={`Avatar ${avatar.id}`}
                     />
                     <Card.Body>
