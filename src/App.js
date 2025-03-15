@@ -8,20 +8,16 @@ import CognitoCallback from './auth/CognitoCallback';
 import CognitoCallbackClear from './auth/CognitoCallbackClear';
 
 function App() {
-	
    return (
     <Router>
       <Routes> 
         <Route path="/" element={<Home />} />
         <Route path="/settings" element={<Settings />} />
-		<Route path="/auth/callback" component={CognitoCallback} />
-		<Route path="/auth/callback/clear" component={CognitoCallbackClear} />
+        <Route path="/auth/callback" element={<CognitoCallback />} />
+        <Route path="/auth/callback/clear" element={<CognitoCallbackClear />} />
       </Routes>
     </Router>
   );
-  
-  
 }
 
 export default App;
-
