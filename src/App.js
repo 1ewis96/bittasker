@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from "react-oidc-context";
 
 import Home from './pages/Home';
-import Navigation from './pages/Navigation';
-import Footer from './pages/Footer';
 import Settings from './pages/Settings';
 
 function App() {
@@ -32,3 +30,4 @@ const auth = useAuth();
 }
 
 export default App;
+
