@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import logo from "../assets/logo.png"; // Ensure correct path
 import profilePic from "../assets/profile.jpg"; // Ensure correct path
@@ -76,17 +77,17 @@ const Navigation = () => {
                       Refresh Token: {auth.user?.refresh_token}
                     </pre>
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => (window.location.href = "/settings")}>
-                    Settings
-                  </Dropdown.Item>
+					<Dropdown.Item as={Link} to="/settings">
+					  Settings
+					</Dropdown.Item>
                   <Dropdown.Item 
-  onClick={() => {
-    const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
-    window.location.href = logoutUrl;
-  }}
->
-  Sign Out
-</Dropdown.Item>
+					  onClick={() => {
+						const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
+						window.location.href = logoutUrl;
+					  }}
+					>
+					  Sign Out
+					</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
