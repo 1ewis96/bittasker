@@ -12,7 +12,7 @@ const CognitoCallback = () => {
   useEffect(() => {
     const authenticateUser = async () => {
       // Wait for auth state to be ready
-      if (auth.isAuthenticated && auth.idToken) {
+      if (auth.isAuthenticated && auth.user?.id_token) {
         try {
           // Prepare the request payload with the id_token
           const idToken = auth.idToken; // Get the id_token from the auth context
