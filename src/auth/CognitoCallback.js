@@ -10,13 +10,8 @@ const CognitoCallback = () => {
   const [errorMessage, setErrorMessage] = useState(""); // To store error messages if any
 
   useEffect(() => {
-    // Early return if auth is loading or there is an authentication error
-    if (auth.isLoading) {
-      return;
-    }
-
     const authenticateUser = async () => {
-      // Ensure the user is authenticated before calling the API
+      // Wait for auth state to be ready
       if (auth.isAuthenticated && auth.idToken) {
         try {
           // Prepare the request payload with the id_token
@@ -25,9 +20,7 @@ const CognitoCallback = () => {
           // Call the API using Axios
           const response = await axios.post(
             "https://api.bittasker.xyz/cognito/auth",
-            {
-              id_token: idToken,
-            },
+            { id_token: idToken },
             {
               headers: {
                 "Content-Type": "application/json",
@@ -44,18 +37,15 @@ const CognitoCallback = () => {
               // On success, redirect the user to the home page
               navigate("/"); // Redirect user to '/'
             } else {
-              // Handle unexpected success message or data
               setErrorMessage("Unexpected response from the server.");
             }
           } else {
-            // Handle unsuccessful response (non-200 status)
             setErrorMessage("API call failed with status: " + response.status);
           }
         } catch (error) {
           console.error("Error during API call:", error);
           setErrorMessage("An error occurred while verifying the user.");
         } finally {
-          // Stop loading after the operation finishes
           setLoading(false);
         }
       } else {
@@ -64,7 +54,11 @@ const CognitoCallback = () => {
       }
     };
 
-    authenticateUser();
+    // Only call authenticateUser once auth is loaded and authenticated
+    if (!auth.isLoading) {
+      authenticateUser();
+    }
+
   }, [auth.isAuthenticated, auth.idToken, auth.isLoading, navigate]);
 
   // Handle error states
