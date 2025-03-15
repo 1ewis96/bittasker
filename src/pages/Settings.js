@@ -3,7 +3,7 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import { useSecureFunction } from "../hooks/useSecureFunction"; // Replace with actual import
+import useSecureFunction from "../hooks/useSecureFunction"; // Default import
 import axios from "axios";
 
 const Settings = () => {
