@@ -11,11 +11,11 @@ const CognitoCallback = () => {
 
   useEffect(() => {
     const authenticateUser = async () => {
-      // Wait for auth state to be ready
+      // Wait for auth state to be ready and ensure id_token exists
       if (auth.isAuthenticated && auth.user?.id_token) {
         try {
           // Prepare the request payload with the id_token
-          const idToken = auth.idToken; // Get the id_token from the auth context
+          const idToken = auth.user?.id_token; // Get the id_token from the auth context
 
           // Call the API using Axios
           const response = await axios.post(
@@ -40,26 +40,26 @@ const CognitoCallback = () => {
               setErrorMessage("Unexpected response from the server.");
             }
           } else {
-            setErrorMessage("API call failed with status: " + response.status);
+            setErrorMessage(`API call failed with status: ${response.status}`);
           }
         } catch (error) {
           console.error("Error during API call:", error);
           setErrorMessage("An error occurred while verifying the user.");
         } finally {
-          setLoading(false);
+          setLoading(false); // Stop loading after API call completes
         }
       } else {
         setErrorMessage("Authentication failed or missing ID token.");
-        setLoading(false);
+        setLoading(false); // Stop loading if auth is not completed
       }
     };
 
     // Only call authenticateUser once auth is loaded and authenticated
-    if (!auth.isLoading) {
+    if (!auth.isLoading && auth.isAuthenticated) {
       authenticateUser();
     }
 
-  }, [auth.isAuthenticated, auth.idToken, auth.isLoading, navigate]);
+  }, [auth.isAuthenticated, auth.user?.id_token, auth.isLoading, navigate]);
 
   // Handle error states
   if (auth.error) {
