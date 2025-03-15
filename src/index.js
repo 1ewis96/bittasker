@@ -11,10 +11,10 @@ import { AuthProvider } from "react-oidc-context";
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_CdtrjKgCZ",  // Cognito hosted login page
   client_id: "1us07g33qbs5l00sdr1grcg2aj",  // Your App Client ID
-  redirect_uri: "https://bittasker.xyz",  // The URL to redirect after login (use the root domain)
+  redirect_uri: "https://bittasker.xyz/auth/callback",  // The URL to redirect after login (use the root domain)
   response_type: "code",  // Authorization code flow
   scope: "email openid phone",  // Scopes to request
-  post_logout_redirect_uri: "https://bittasker.xyz",  // The URL to redirect after logout (use the root domain)
+  post_logout_redirect_uri: "https://bittasker.xyz/auth/callback/clear",  // The URL to redirect after logout (use the root domain)
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
