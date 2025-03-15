@@ -20,7 +20,7 @@ const Navigation = () => {
   return (
     <Navbar bg="dark" variant="dark" expand={true}>
       <Container>
-        <Navbar.Brand href="/">
+        <Navbar.Brand as={Link} to="/">
           <img
             src={logo}
             alt="Logo"
