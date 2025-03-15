@@ -47,7 +47,7 @@ const Navigation = () => {
                 >
                   {/* Use userData.avatar.path if available */}
                   <img
-                    src={userData?.avatar?.path ? `https://api.bittasker.xyz/images/${userData.avatar.path}` : profilePic}
+                    src={userData?.avatar?.path ? `https://s3.bittasker.xyz/avatars/${userData.avatar.path}` : profilePic}
                     alt="Profile"
                     width="40"
                     height="40"
