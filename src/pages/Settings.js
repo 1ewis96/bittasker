@@ -10,6 +10,7 @@ const Settings = () => {
   const auth = useAuth();
   const apiUrl = process.env.REACT_APP_HOST_API_URL;
   const s3Url = process.env.REACT_APP_S3_URL; // Get the S3 URL from the env variables
+  const avatarLocation = process.env.REACT_APP_AVATAR_LOCATION; // Get the Avatar Location from the env variables
   const avatarAPI = `${apiUrl}/profile/avatar/`;
 
   const [avatars, setAvatars] = useState([]);
@@ -79,7 +80,7 @@ const Settings = () => {
                   >
                     <Card.Img
                       variant="top"
-                      src={`${s3Url}/${avatar.path}`} // Prefix with the S3 URL
+                      src={`${s3Url}${avatarLocation}/${avatar.path}`} // Prefix with the S3 URL and avatar location
                       alt={`Avatar ${avatar.id}`}
                     />
                     <Card.Body>
