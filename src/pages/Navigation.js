@@ -4,7 +4,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import logo from "../assets/logo.png";
-import profilePic from "../assets/profile.jpg";
 import { useAuth } from "react-oidc-context";
 import { FaSignInAlt, FaUserPlus, FaLock } from "react-icons/fa";
 import { useUser } from "../context/UserContext"; // Import useUser hook
@@ -16,6 +15,7 @@ const Navigation = () => {
   const cognitoURL = process.env.REACT_APP_COGNITO_URL;
   const cognitoClientID = process.env.REACT_APP_COGNITO_CLIENT_ID;
   const logoutReturnURL = process.env.REACT_APP_LOGOUT_RETURN_URL;
+  const s3Bucket = process.env.REACT_APP_S3_URL;
   const signupReturnURL = process.env.REACT_APP_SIGNUP_RETURN_URL;
   const forgotPasswordReturnURL = process.env.REACT_APP_FORGOT_PASSWORD_RETURN_URL;
 
@@ -47,7 +47,7 @@ const Navigation = () => {
                 >
                   {/* Use userData.avatar.path if available */}
                   <img
-                    src={userData?.avatar?.path ? `https://s3.bittasker.xyz/avatars/${userData.avatar.path}` : profilePic}
+                    src={userData?.avatar?.path ? `${s3Bucket}/${userData.avatar.path}` : 'default.jpg'}
                     alt="Profile"
                     width="40"
                     height="40"
@@ -88,18 +88,19 @@ const Navigation = () => {
                   id="profile-dropdown"
                   className="d-flex align-items-center"
                 >
-                  <img
-                    src={profilePic}
-                    alt="Profile"
-                    width="40"
-                    height="40"
-                    style={{
-                      borderRadius: "50%",
-                      marginRight: "10px",
-                      objectFit: "cover",
-                      border: "3px solid #fff",
-                    }}
-                  />
+				<img
+				  src={`${s3Bucket}/${userData?.avatar?.path || 'avatars/default.jpg'}`}
+				  alt="Profile"
+				  width="40"
+				  height="40"
+				  style={{
+					borderRadius: "50%",
+					marginRight: "10px",
+					objectFit: "cover",
+					border: "3px solid #fff",
+				  }}
+				/>
+
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
