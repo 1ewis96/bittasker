@@ -7,6 +7,14 @@ import { FaSignInAlt, FaUserPlus, FaLock } from "react-icons/fa";
 
 const Navigation = () => {
   const auth = useAuth();
+  
+  const cognitoAuthority = process.env.REACT_APP_COGNITO_AUTHORITY;
+  const cognitoURL = process.env.REACT_APP_COGNITO_URL;
+  const cognitoClientID = process.env.REACT_APP_COGNITO_CLIENT_ID;
+  const signinReturnURL = process.env.REACT_APP_SIGNIN_RETURN_URL;
+  const logoutReturnURL = process.env.REACT_APP_LOGOUT_RETURN_URL;
+  const signupReturnURL = process.env.REACT_APP_SIGNUP_RETURN_URL;
+  const forgotPasswordReturnURL = process.env.REACT_APP_FORGOT_PASSWORD_RETURN_URL;
 
   return (
     <Navbar bg="dark" variant="dark" expand={true}>
@@ -98,28 +106,26 @@ const Navigation = () => {
                   />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-<Dropdown.Item 
-  className="d-flex justify-content-between align-items-center" 
-  onClick={() => auth.signinRedirect()}
->
-  Sign In <FaSignInAlt className="ms-2" />
-</Dropdown.Item>
+                  <Dropdown.Item 
+                    className="d-flex justify-content-between align-items-center" 
+                    onClick={() => auth.signinRedirect()}
+                  >
+                    Sign In <FaSignInAlt className="ms-2" />
+                  </Dropdown.Item>
 
-<Dropdown.Item 
-  className="d-flex justify-content-between align-items-center" 
-  onClick={() => window.location.href = "https://auth.bittasker.xyz/signup?..."}
->
-  Sign Up <FaUserPlus className="ms-2" />
-</Dropdown.Item>
+                  <Dropdown.Item 
+                    className="d-flex justify-content-between align-items-center" 
+                    onClick={() => window.location.href = `${cognitoURL}/signup?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`}
+                  >
+                    Sign Up <FaUserPlus className="ms-2" />
+                  </Dropdown.Item>
 
-<Dropdown.Item 
-  className="d-flex justify-content-between align-items-center" 
-  onClick={() => window.location.href = "https://auth.bittasker.xyz/forgotPassword?..."}
->
-  Forgot Password <FaLock className="ms-2" />
-</Dropdown.Item>
-
-
+                  <Dropdown.Item 
+                    className="d-flex justify-content-between align-items-center" 
+                    onClick={() => window.location.href = `${cognitoURL}/forgotPassword?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${forgotPasswordReturnURL}`}
+                  >
+                    Forgot Password <FaLock className="ms-2" />
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
