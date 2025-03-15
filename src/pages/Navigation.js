@@ -47,7 +47,7 @@ const Navigation = () => {
                 >
                   {/* Use userData.avatar.path if available */}
                   <img
-                    src={userData?.avatar?.path ? `${s3Bucket}/${userData.avatar.path}` : `${s3Bucket}/avatars/default.jpg`}
+                    src={userData?.avatar?.path ? `${s3Bucket}/avatars/${userData.avatar.path}` : `${s3Bucket}/avatars/default.jpg`}
                     alt="Profile"
                     width="40"
                     height="40"
