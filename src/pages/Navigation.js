@@ -79,7 +79,14 @@ const Navigation = () => {
                   <Dropdown.Item onClick={() => (window.location.href = "/settings")}>
                     Settings
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => auth.removeUser()}>Sign Out</Dropdown.Item>
+                  <Dropdown.Item 
+  onClick={() => {
+    const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
+    window.location.href = logoutUrl;
+  }}
+>
+  Sign Out
+</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
