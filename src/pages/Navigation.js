@@ -13,9 +13,9 @@ const Navigation = () => {
   const { userData, isAuthenticated } = useUser(); // Consume user data from context
 
   const cognitoURL = process.env.REACT_APP_COGNITO_URL;
+  const s3Bucket = process.env.REACT_APP_S3_URL;
   const cognitoClientID = process.env.REACT_APP_COGNITO_CLIENT_ID;
   const logoutReturnURL = process.env.REACT_APP_LOGOUT_RETURN_URL;
-  const s3Bucket = process.env.REACT_APP_S3_URL;
   const signupReturnURL = process.env.REACT_APP_SIGNUP_RETURN_URL;
   const forgotPasswordReturnURL = process.env.REACT_APP_FORGOT_PASSWORD_RETURN_URL;
 
@@ -47,7 +47,7 @@ const Navigation = () => {
                 >
                   {/* Use userData.avatar.path if available */}
                   <img
-                    src={userData?.avatar?.path ? `${s3Bucket}/${userData.avatar.path}` : 'default.jpg'}
+                    src={userData?.avatar?.path ? `${s3Bucket}/${userData.avatar.path}` : `${s3Bucket}/avatars/default.jpg`}
                     alt="Profile"
                     width="40"
                     height="40"
@@ -59,23 +59,38 @@ const Navigation = () => {
                     }}
                   />
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Hello: {userData?.email}
+                      Hello: {auth.user?.profile.email}
                     </pre>
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/settings">
-                    Settings
+                  <Dropdown.Item disabled>
+                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      ID Token: {auth.user?.id_token}
+                    </pre>
                   </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
-                      window.location.href = logoutUrl;
-                    }}
-                  >
-                    Sign Out
+                  <Dropdown.Item disabled>
+                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      Access Token: {auth.user?.access_token}
+                    </pre>
                   </Dropdown.Item>
+                  <Dropdown.Item disabled>
+                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      Refresh Token: {auth.user?.refresh_token}
+                    </pre>
+                  </Dropdown.Item>
+					<Dropdown.Item as={Link} to="/settings">
+					  Settings
+					</Dropdown.Item>
+                  <Dropdown.Item 
+					  onClick={() => {
+						const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
+						window.location.href = logoutUrl;
+					  }}
+					>
+					  Sign Out
+					</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
@@ -88,8 +103,8 @@ const Navigation = () => {
                   id="profile-dropdown"
                   className="d-flex align-items-center"
                 >
-				<img
-				  src={`${s3Bucket}/${userData?.avatar?.path || 'avatars/default.jpg'}`}
+    				<img
+				  src={`${s3Bucket}/avatars/default.jpg`}
 				  alt="Profile"
 				  width="40"
 				  height="40"
@@ -100,7 +115,6 @@ const Navigation = () => {
 					border: "3px solid #fff",
 				  }}
 				/>
-
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
