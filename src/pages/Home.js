@@ -5,8 +5,10 @@ import HeroSection from "../pages/HeroSection"; // Import the component
 import Navigation from "../pages/Navigation"; // Import the component
 import Footer from "../pages/Footer"; // Import the component
 
+
 const Home = () => {
 
+const s3Bucket = process.env.REACT_APP_S3_URL;
 const auth = useAuth();
 
   // Authenticated state.
@@ -36,6 +38,8 @@ const auth = useAuth();
 	 <div>
       <HeroSection /> {/* Use the component here */}
     </div>
+
+	
 
 <Container className="mt-4">
       <Footer /> {/* Use the component here */}
