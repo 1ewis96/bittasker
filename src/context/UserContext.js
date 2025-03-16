@@ -1,113 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { useUser } from "../context/UserContext"; // Import the useUser hook
+// src/context/UserContext.js
 
-const cognitoDomain = process.env.REACT_APP_COGNITO_URL;
-const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
-const redirectUri = process.env.REACT_APP_SIGNUP_RETURN_URL;
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-const CognitoCallback = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
-  
-  // Accessing the user context to update it
-  const { refreshUserData } = useUser();
+const UserContext = createContext();
 
-  useEffect(() => {
-    console.log("Component Mounted: CognitoCallback");
+export const UserProvider = ({ children }) => {
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);  // Added loading state
+  const [error, setError] = useState(null);  // Added error state
 
-    const exchangeCodeForToken = async (code) => {
-      console.log("Authorization Code Received:", code);
+  // Function to get the token from localStorage
+  const getToken = () => {
+    const token = localStorage.getItem('access_token'); // Retrieve token from localStorage
+    return token;
+  };
 
-      if (!cognitoDomain || !clientId || !redirectUri) {
-        console.error("Missing environment variables!");
-        setErrorMessage("Configuration error: Missing Cognito settings.");
-        setLoading(false);
-        return;
-      }
+  // Function to check if the user is authenticated (i.e., has a token)
+  const isAuthenticated = () => {
+    return !!getToken();
+  };
 
-      const tokenEndpoint = `${cognitoDomain}/oauth2/token`;
-      const params = new URLSearchParams({
-        grant_type: "authorization_code",
-        client_id: clientId,
-        code: code,
-        redirect_uri: redirectUri,
-      });
-
+  const fetchUserProfile = useCallback(async () => {
+    const token = getToken();  // Get the token from localStorage
+    if (isAuthenticated() && token) {
+      setLoading(true);
       try {
-        const response = await axios.post(tokenEndpoint, params, {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        const response = await fetch('https://api.bittasker.xyz/profile/me/', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        console.log("Token Response:", response.data);
-
-        const { id_token, access_token, refresh_token } = response.data;
-        if (!id_token) throw new Error("No ID token received from Cognito.");
-
-        const decodedIdToken = jwtDecode(id_token);
-        console.log("Decoded ID Token:", decodedIdToken);
-
-        if (!decodedIdToken.exp) {
-          throw new Error("Invalid ID Token (no expiration time).");
-        }
-
-        const expiresAt = decodedIdToken.exp * 1000;
-        localStorage.setItem("id_token", id_token);
-        localStorage.setItem("access_token", access_token || "");
-        localStorage.setItem("refresh_token", refresh_token || "");
-        localStorage.setItem("expires_at", expiresAt.toString());
-
-        // Verify user with API
-        console.log("Verifying user with API...");
-        const verifyResponse = await axios.post(
-          "https://api.bittasker.xyz/cognito/auth",
-          { id_token },
-          { headers: { "Content-Type": "application/json" } }
-        );
-
-        console.log("API Verification Response:", verifyResponse.data);
-
-        if (verifyResponse.status === 200 && verifyResponse.data?.message === "User verified") {
-          console.log("User verified! Refreshing user context...");
-
-          // Call refreshUserData to update the context after successful authentication
-          refreshUserData();
-
-          // Now, redirect the user after updating the context
-          console.log("User verified! Redirecting...");
-          navigate("/");
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.data); // Store the profile data (including avatar)
         } else {
-          throw new Error("Unexpected response from authentication API.");
+          throw new Error(`Error fetching user data: ${response.status}`);
         }
       } catch (error) {
-        console.error("Authentication Error:", error);
-        setErrorMessage(error.response?.data?.message || error.message || "Authentication failed.");
+        setError(error.message);  // Store error message
+        console.error('Error fetching user data:', error);
       } finally {
-        setLoading(false);
+        setLoading(false);  // Set loading to false after the request completes
       }
-    };
-
-    const urlParams = new URLSearchParams(location.search);
-    const authCode = urlParams.get("code");
-
-    if (authCode) {
-      console.log("Authorization Code Found:", authCode);
-      exchangeCodeForToken(authCode);
     } else {
-      console.error("No authorization code found in URL.");
-      setErrorMessage("Authentication failed: No authorization code provided.");
-      setLoading(false);
+      setLoading(false);  // Set loading to false if not authenticated
     }
-  }, [location, navigate, refreshUserData]);
+  }, []);
 
-  // UI Feedback
-  if (loading) return <div>Loading authentication...</div>;
-  if (errorMessage) return <div>Error: {errorMessage}</div>;
-  return <div>Creating session...</div>;
+  // Call fetchUserProfile on mount or when token changes
+  useEffect(() => {
+    if (isAuthenticated()) {
+      fetchUserProfile();
+    } else {
+      setLoading(false);  // Stop loading if no token is found
+    }
+  }, [fetchUserProfile]);
+
+  // Refresh the user data when called
+  const refreshUserData = () => {
+    fetchUserProfile();
+  };
+
+  return (
+    <UserContext.Provider value={{ userData, isAuthenticated: isAuthenticated(), loading, error, refreshUserData }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export default CognitoCallback;
+export const useUser = () => {
+  return useContext(UserContext);
+};

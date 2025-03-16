@@ -13,6 +13,9 @@ const CognitoCallback = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  
+  // Accessing the user context to update it
+  const { refreshUserData } = useUser();
 
   useEffect(() => {
     console.log("Component Mounted: CognitoCallback");
@@ -69,6 +72,12 @@ const CognitoCallback = () => {
         console.log("API Verification Response:", verifyResponse.data);
 
         if (verifyResponse.status === 200 && verifyResponse.data?.message === "User verified") {
+          console.log("User verified! Refreshing user context...");
+
+          // Call refreshUserData to update the context after successful authentication
+          refreshUserData();
+
+          // Now, redirect the user after updating the context
           console.log("User verified! Redirecting...");
           navigate("/");
         } else {
@@ -93,7 +102,7 @@ const CognitoCallback = () => {
       setErrorMessage("Authentication failed: No authorization code provided.");
       setLoading(false);
     }
-  }, [location, navigate]);
+  }, [location, navigate, refreshUserData]);
 
   // UI Feedback
   if (loading) return <div>Loading authentication...</div>;
