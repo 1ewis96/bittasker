@@ -1,5 +1,3 @@
-// src/context/UserContext.js
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const UserContext = createContext();
@@ -15,10 +13,10 @@ export const UserProvider = ({ children }) => {
     return token;
   };
 
-  // Function to check if the user is authenticated (i.e., has a token)
-  const isAuthenticated = () => {
+  // Wrap 'isAuthenticated' in useCallback to prevent it from changing on every render
+  const isAuthenticated = useCallback(() => {
     return !!getToken();
-  };
+  }, []); // This function doesn't depend on any props or state, so the dependency array is empty
 
   const fetchUserProfile = useCallback(async () => {
     const token = getToken();  // Get the token from localStorage
@@ -47,7 +45,7 @@ export const UserProvider = ({ children }) => {
     } else {
       setLoading(false);  // Set loading to false if not authenticated
     }
-  }, []);
+  }, [isAuthenticated]); // Add 'isAuthenticated' as a dependency here
 
   // Call fetchUserProfile on mount or when token changes
   useEffect(() => {
@@ -56,7 +54,7 @@ export const UserProvider = ({ children }) => {
     } else {
       setLoading(false);  // Stop loading if no token is found
     }
-  }, [fetchUserProfile]);
+  }, [isAuthenticated, fetchUserProfile]); // Add 'isAuthenticated' as a dependency here
 
   // Refresh the user data when called
   const refreshUserData = () => {
