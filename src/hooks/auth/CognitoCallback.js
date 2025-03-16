@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useUser } from "../context/UserContext"; // Import the useUser hook
 
 const cognitoDomain = process.env.REACT_APP_COGNITO_URL;
 const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
