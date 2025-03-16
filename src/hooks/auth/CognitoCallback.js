@@ -10,84 +10,105 @@ const CognitoCallback = () => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
- useEffect(() => {
-  const authenticateUser = async () => {
-    console.log("Authenticating user...");
+  useEffect(() => {
+    console.log("Component Mounted: CognitoCallback");
 
-    // Check if auth is loaded and authenticated
-    if (auth.isAuthenticated && auth.user?.id_token) {
+    const authenticateUser = async () => {
+      console.log("=== Authenticating User ===");
+      console.log("Auth Object:", auth);
+      console.log("Auth Loading:", auth.isLoading);
+      console.log("Auth Authenticated:", auth.isAuthenticated);
+      console.log("Auth User:", auth.user);
+
+      if (!auth.isAuthenticated || !auth.user) {
+        console.warn("Auth is not authenticated or user object is missing.");
+        setErrorMessage("Authentication failed or user data missing.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        console.log("ID Token found:", auth.user.id_token);
-
         const { id_token, access_token, refresh_token } = auth.user;
-        const decodedIdToken = jwtDecode(id_token);
-        const expiresAt = decodedIdToken.exp * 1000;
 
-        // Store the tokens and expiry time
+        if (!id_token) {
+          console.error("ID Token is missing!");
+          setErrorMessage("ID Token is missing from authentication response.");
+          setLoading(false);
+          return;
+        }
+
+        console.log("ID Token Found:", id_token);
+
+        const decodedIdToken = jwtDecode(id_token);
+        console.log("Decoded ID Token:", decodedIdToken);
+
+        if (!decodedIdToken.exp) {
+          console.error("ID Token does not contain an expiry.");
+          setErrorMessage("Invalid ID Token received.");
+          setLoading(false);
+          return;
+        }
+
+        const expiresAt = decodedIdToken.exp * 1000;
+        console.log("Token Expiration Time:", new Date(expiresAt));
+
+        // Store tokens in local storage
         localStorage.setItem("id_token", id_token);
-        localStorage.setItem("access_token", access_token);
-        localStorage.setItem("refresh_token", refresh_token);
+        localStorage.setItem("access_token", access_token || "");
+        localStorage.setItem("refresh_token", refresh_token || "");
         localStorage.setItem("expires_at", expiresAt.toString());
 
-        // Call the API to verify the id_token
+        // API call to verify user
+        console.log("Calling API to verify user...");
         const response = await axios.post(
           "https://api.bittasker.xyz/cognito/auth",
           { id_token },
           {
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
           }
         );
 
-        if (response.status === 200) {
-          const data = response.data;
-          if (data.message === "User verified") {
-            console.log("User verified, redirecting...");
-            navigate("/"); // Redirect user to home page on success
-          } else {
-            setErrorMessage("Unexpected response from the server.");
-          }
+        console.log("API Response:", response);
+
+        if (response.status === 200 && response.data?.message === "User verified") {
+          console.log("User verified, redirecting to home...");
+          navigate("/");
         } else {
-          setErrorMessage(`API call failed with status: ${response.status}`);
+          console.error("Unexpected API response:", response.data);
+          setErrorMessage("Unexpected response from authentication API.");
         }
       } catch (error) {
-        console.error("Error during API call:", error);
-        setErrorMessage("An error occurred while verifying the user.");
+        console.error("Error during authentication process:", error);
+        setErrorMessage(error.response?.data?.message || "Authentication failed.");
       } finally {
-        setLoading(false); // Stop loading after API call completes
+        setLoading(false);
       }
+    };
+
+    // Ensure auth is fully loaded before attempting authentication
+    if (!auth.isLoading) {
+      authenticateUser();
     } else {
-      console.log("No ID token found, authentication failed.");
-      setErrorMessage("Authentication failed or missing ID token.");
-      setLoading(false);
+      console.log("Auth is still loading...");
     }
-  };
+  }, [auth.isAuthenticated, auth.user, auth.isLoading, navigate]);
 
-  // Only trigger authentication when auth is loaded and authenticated
-  if (!auth.isLoading && auth.isAuthenticated) {
-    console.log("Auth is loaded and authenticated.");
-    authenticateUser();
-  } else if (auth.isLoading) {
-    console.log("Auth is still loading...");
-  } else {
-    console.log("Auth is not authenticated.");
-  }
-}, [auth.isAuthenticated, auth.user, auth.isLoading, navigate]); // Include auth.user in the dependency array
+  // Additional Debugging Logs
+  useEffect(() => {
+    console.log("Auth State Updated:", auth);
+  }, [auth]);
 
-  // Show loading indicator if auth is still loading
-  if (auth.isLoading) {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    console.log("Error Message Updated:", errorMessage);
+  }, [errorMessage]);
+
+  // UI Feedback
+  if (auth.isLoading || loading) {
+    return <div>Loading authentication...</div>;
   }
 
-  // If there's an authentication error
   if (auth.error) {
     return <div>Error: {auth.error.message}</div>;
-  }
-
-  // Handle the error message or the successful state
-  if (loading) {
-    return <div>Loading...</div>;
   }
 
   if (errorMessage) {
