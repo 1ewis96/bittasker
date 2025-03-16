@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { useAuth } from "react-oidc-context";
+import useAuthCheck from "../hooks/auth/TokenValidation"; // Import the useAuthCheck hook
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import axios from "axios";
 
 const Settings = () => {
-  const auth = useAuth();
+  const { isAuthenticated } = useAuthCheck(); // Removed unused 'loading' and 'errorMessage'
+  
   const apiUrl = process.env.REACT_APP_HOST_API_URL;
   const s3Url = process.env.REACT_APP_S3_URL; // Get the S3 URL from the env variables
   const avatarLocation = process.env.REACT_APP_AVATAR_S3_LOCATION; // Get the Avatar Location from the env variables
@@ -15,25 +16,46 @@ const Settings = () => {
   const [avatars, setAvatars] = useState([]);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-  // Fetch avatars on component mount
-  const fetchAvatars = async () => {
-    if (!auth.isAuthenticated) return; // Ensure user is authenticated
+  // Memoize fetchAvatars using useCallback
+  const fetchAvatars = useCallback(async () => {
+    if (!isAuthenticated) return; // Ensure user is authenticated
+
+    const accessToken = localStorage.getItem("access_token"); // Get the access token from localStorage
+
+    if (!accessToken) {
+      console.error("No access token found");
+      return;
+    }
 
     try {
       const response = await axios.get(avatarAPI, {
         headers: {
-          Authorization: `Bearer ${auth.user?.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setAvatars(response.data.avatars); // Populate the avatars state
     } catch (error) {
       console.error("Error fetching avatars", error);
     }
-  };
+  }, [isAuthenticated, avatarAPI]);
+
+  // Fetch avatars when the component mounts
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchAvatars();
+    }
+  }, [isAuthenticated, fetchAvatars]); // Add fetchAvatars to the dependency array
 
   // Handle avatar selection
   const handleAvatarClick = async (avatarId) => {
-    if (!auth.isAuthenticated) return; // Ensure user is authenticated
+    if (!isAuthenticated) return; // Ensure user is authenticated
+
+    const accessToken = localStorage.getItem("access_token"); // Get the access token from localStorage
+
+    if (!accessToken) {
+      console.error("No access token found");
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -41,7 +63,7 @@ const Settings = () => {
         { avatar: avatarId },
         {
           headers: {
-            Authorization: `Bearer ${auth.user?.access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -52,18 +74,11 @@ const Settings = () => {
     }
   };
 
-  // Fetch avatars when the component mounts
-  useEffect(() => {
-    if (auth.isAuthenticated) {
-      fetchAvatars();
-    }
-  }, [auth.isAuthenticated]);
-
   return (
     <>
       <Navigation />
       <Container>
-        {auth.isAuthenticated ? (
+        {isAuthenticated ? (
           <>
             <h3>Choose your avatar</h3>
             <Row>

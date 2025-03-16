@@ -7,7 +7,7 @@ import { useUser } from "../context/UserContext"; // Import the useUser hook
 
 const Navigation = () => {
   // Authentication Check (using useAuthCheck)
-  const { isAuthenticated, loading, errorMessage } = useAuthCheck();
+  const { isAuthenticated } = useAuthCheck();
 
   // User Data from Context
   const { userData } = useUser();
