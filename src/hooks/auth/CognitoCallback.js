@@ -30,24 +30,32 @@ const CognitoCallback = () => {
         return;
       }
 
+      // Construct the token exchange endpoint URL and parameters
       const tokenEndpoint = `${cognitoDomain}/oauth2/token`;
       const params = new URLSearchParams({
         grant_type: "authorization_code",
         client_id: clientId,
-        code: code,
-        redirect_uri: redirectUri,
+        code: code,           // The authorization code you received
+        redirect_uri: redirectUri, // The redirect URI you registered with Cognito
       });
 
+      console.log("Token Exchange Parameters:", params.toString());
+
       try {
+        // Make the request to exchange the authorization code for tokens
         const response = await axios.post(tokenEndpoint, params, {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });
 
-        console.log("Token Response:", response.data);
+        console.log("Token Exchange Response:", response.data);
 
         const { id_token, access_token, refresh_token } = response.data;
-        if (!id_token) throw new Error("No ID token received from Cognito.");
 
+        if (!id_token) {
+          throw new Error("No ID token received from Cognito.");
+        }
+
+        // Decode and verify the ID token
         const decodedIdToken = jwtDecode(id_token);
         console.log("Decoded ID Token:", decodedIdToken);
 
@@ -55,13 +63,16 @@ const CognitoCallback = () => {
           throw new Error("Invalid ID Token (no expiration time).");
         }
 
+        // Calculate expiration time
         const expiresAt = decodedIdToken.exp * 1000;
+
+        // Store tokens in localStorage
         localStorage.setItem("id_token", id_token);
         localStorage.setItem("access_token", access_token || "");
         localStorage.setItem("refresh_token", refresh_token || "");
         localStorage.setItem("expires_at", expiresAt.toString());
 
-        // Verify user with API
+        // Verify the user with your API
         console.log("Verifying user with API...");
         const verifyResponse = await axios.post(
           "https://api.bittasker.xyz/cognito/auth",
@@ -91,6 +102,7 @@ const CognitoCallback = () => {
       }
     };
 
+    // Get the authorization code from the URL
     const urlParams = new URLSearchParams(location.search);
     const authCode = urlParams.get("code");
 
