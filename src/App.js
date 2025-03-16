@@ -7,6 +7,8 @@ import Settings from './pages/Settings';
 import CognitoCallback from './auth/CognitoCallback';
 import CognitoCallbackClear from './auth/CognitoCallbackClear';
 
+
+
 function App() {
   return (
     <UserProvider> {/* Wrap your app with UserProvider */}

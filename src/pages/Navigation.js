@@ -24,7 +24,7 @@ const Navigation = () => {
       <Container>
         <Navbar.Brand as={Link} to="/">
           <img
-            src={logo}
+            src={`${s3Bucket}/static/logo.png`}
             alt="Logo"
             width="30"
             height="30"

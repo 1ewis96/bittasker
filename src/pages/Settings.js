@@ -3,7 +3,6 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import useSecureFunction from "../hooks/useSecureFunction"; // Default import
 import axios from "axios";
 
 const Settings = () => {
@@ -15,9 +14,6 @@ const Settings = () => {
 
   const [avatars, setAvatars] = useState([]);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
-
-  // Use useSecureFunction to ensure the user is authenticated
-  const secureFetch = useSecureFunction();
 
   // Fetch avatars on component mount
   const fetchAvatars = async () => {
