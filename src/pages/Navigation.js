@@ -3,7 +3,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
-import logo from "../assets/logo.png";
 import { useAuth } from "react-oidc-context";
 import { FaSignInAlt, FaUserPlus, FaLock } from "react-icons/fa";
 import { useUser } from "../context/UserContext"; // Import useUser hook
