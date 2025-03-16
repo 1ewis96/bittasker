@@ -1,15 +1,16 @@
-// src/components/Navigation.js
-
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
-import { useAuth } from "react-oidc-context";
 import { FaSignInAlt, FaUserPlus, FaLock } from "react-icons/fa";
-import { useUser } from "../context/UserContext"; // Import useUser hook
+import useAuthCheck from "../hooks/auth/TokenValidation"; // Import the useAuthCheck hook
+import { useUser } from "../context/UserContext"; // Import the useUser hook
 
 const Navigation = () => {
-  const auth = useAuth();
-  const { userData, isAuthenticated } = useUser(); // Consume user data from context
+  // Authentication Check (using useAuthCheck)
+  const { isAuthenticated, loading, errorMessage } = useAuthCheck();
+
+  // User Data from Context
+  const { userData } = useUser();
 
   const cognitoURL = process.env.REACT_APP_COGNITO_URL;
   const s3Bucket = process.env.REACT_APP_S3_URL;
@@ -58,38 +59,38 @@ const Navigation = () => {
                     }}
                   />
                 </Dropdown.Toggle>
-                 <Dropdown.Menu>
+                <Dropdown.Menu>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Hello: {auth.user?.profile.email}
+                      Hello: {userData?.profile?.email}
                     </pre>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      ID Token: {auth.user?.id_token}
+                      ID Token: {userData?.id_token}
                     </pre>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Access Token: {auth.user?.access_token}
+                      Access Token: {userData?.access_token}
                     </pre>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Refresh Token: {auth.user?.refresh_token}
+                      Refresh Token: {userData?.refresh_token}
                     </pre>
                   </Dropdown.Item>
-					<Dropdown.Item as={Link} to="/settings">
-					  Settings
-					</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/settings">
+                    Settings
+                  </Dropdown.Item>
                   <Dropdown.Item 
-					  onClick={() => {
-						const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
-						window.location.href = logoutUrl;
-					  }}
-					>
-					  Sign Out
-					</Dropdown.Item>
+                    onClick={() => {
+                      const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
+                      window.location.href = logoutUrl;
+                    }}
+                  >
+                    Sign Out
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
@@ -102,41 +103,37 @@ const Navigation = () => {
                   id="profile-dropdown"
                   className="d-flex align-items-center"
                 >
-    				<img
-				  src={`${s3Bucket}/avatars/default.jpg`}
-				  alt="Profile"
-				  width="40"
-				  height="40"
-				  style={{
-					borderRadius: "50%",
-					marginRight: "10px",
-					objectFit: "cover",
-					border: "3px solid #fff",
-				  }}
-				/>
+                  <img
+                    src={`${s3Bucket}/avatars/default.jpg`}
+                    alt="Profile"
+                    width="40"
+                    height="40"
+                    style={{
+                      borderRadius: "50%",
+                      marginRight: "10px",
+                      objectFit: "cover",
+                      border: "3px solid #fff",
+                    }}
+                  />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
                     className="d-flex justify-content-between align-items-center"
-                    onClick={() => auth.signinRedirect()}
+                    href={`${cognitoURL}/login?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`} // Direct URL
                   >
                     Sign In <FaSignInAlt className="ms-2" />
                   </Dropdown.Item>
 
                   <Dropdown.Item
                     className="d-flex justify-content-between align-items-center"
-                    onClick={() =>
-                      (window.location.href = `${cognitoURL}/signup?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`)
-                    }
+                    href={`${cognitoURL}/signup?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`} // Direct URL
                   >
                     Sign Up <FaUserPlus className="ms-2" />
                   </Dropdown.Item>
 
                   <Dropdown.Item
                     className="d-flex justify-content-between align-items-center"
-                    onClick={() =>
-                      (window.location.href = `${cognitoURL}/forgotPassword?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${forgotPasswordReturnURL}`)
-                    }
+                    href={`${cognitoURL}/forgotPassword?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${forgotPasswordReturnURL}`} // Direct URL
                   >
                     Forgot Password <FaLock className="ms-2" />
                   </Dropdown.Item>
