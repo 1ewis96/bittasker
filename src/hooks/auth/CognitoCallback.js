@@ -1,56 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
+  const cognitoDomain = process.env.REACT_APP_COGNITO_URL;
+    const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
+	  const redirectUri = process.env.REACT_APP_SIGNUP_RETURN_URL;
+  
 const CognitoCallback = () => {
-  const auth = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     console.log("Component Mounted: CognitoCallback");
 
-    const authenticateUser = async () => {
-      console.log("=== Authenticating User ===");
-      console.log("Auth Object:", auth);
-      console.log("Auth Loading:", auth.isLoading);
-      console.log("Auth Authenticated:", auth.isAuthenticated);
-      console.log("Auth User:", auth.user);
+    const exchangeCodeForToken = async (code) => {
+      console.log("Authorization Code Received:", code);
 
-      if (!auth.isAuthenticated || !auth.user) {
-        console.warn("Auth is not authenticated or user object is missing.");
-        setErrorMessage("Authentication failed or user data missing.");
-        setLoading(false);
-        return;
-      }
+      const tokenEndpoint = `https://${cognitoDomain}/oauth2/token`;
+      const params = new URLSearchParams();
+      params.append("grant_type", "authorization_code");
+      params.append("client_id", clientId);
+      params.append("code", code);
+      params.append("redirect_uri", redirectUri);
 
       try {
-        const { id_token, access_token, refresh_token } = auth.user;
+        const response = await axios.post(tokenEndpoint, params, {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        });
+
+        console.log("Token Response:", response.data);
+
+        const { id_token, access_token, refresh_token } = response.data;
 
         if (!id_token) {
-          console.error("ID Token is missing!");
-          setErrorMessage("ID Token is missing from authentication response.");
-          setLoading(false);
-          return;
+          throw new Error("No ID token received from Cognito.");
         }
 
-        console.log("ID Token Found:", id_token);
-
+        // Decode ID Token
         const decodedIdToken = jwtDecode(id_token);
         console.log("Decoded ID Token:", decodedIdToken);
 
-        if (!decodedIdToken.exp) {
-          console.error("ID Token does not contain an expiry.");
-          setErrorMessage("Invalid ID Token received.");
-          setLoading(false);
-          return;
-        }
-
         const expiresAt = decodedIdToken.exp * 1000;
-        console.log("Token Expiration Time:", new Date(expiresAt));
 
         // Store tokens in local storage
         localStorage.setItem("id_token", id_token);
@@ -58,9 +51,9 @@ const CognitoCallback = () => {
         localStorage.setItem("refresh_token", refresh_token || "");
         localStorage.setItem("expires_at", expiresAt.toString());
 
-        // API call to verify user
-        console.log("Calling API to verify user...");
-        const response = await axios.post(
+        // Call API to verify user
+        console.log("Verifying user with API...");
+        const verifyResponse = await axios.post(
           "https://api.bittasker.xyz/cognito/auth",
           { id_token },
           {
@@ -68,47 +61,39 @@ const CognitoCallback = () => {
           }
         );
 
-        console.log("API Response:", response);
+        console.log("API Verification Response:", verifyResponse.data);
 
-        if (response.status === 200 && response.data?.message === "User verified") {
-          console.log("User verified, redirecting to home...");
-          navigate("/");
+        if (verifyResponse.status === 200 && verifyResponse.data?.message === "User verified") {
+          console.log("User verified! Redirecting...");
+          navigate("/"); // Redirect to home page
         } else {
-          console.error("Unexpected API response:", response.data);
-          setErrorMessage("Unexpected response from authentication API.");
+          throw new Error("Unexpected response from authentication API.");
         }
       } catch (error) {
-        console.error("Error during authentication process:", error);
-        setErrorMessage(error.response?.data?.message || "Authentication failed.");
+        console.error("Authentication Error:", error);
+        setErrorMessage(error.response?.data?.message || error.message || "Authentication failed.");
       } finally {
         setLoading(false);
       }
     };
 
-    // Ensure auth is fully loaded before attempting authentication
-    if (!auth.isLoading) {
-      authenticateUser();
+    // Extract "code" from URL
+    const urlParams = new URLSearchParams(location.search);
+    const authCode = urlParams.get("code");
+
+    if (authCode) {
+      console.log("Authorization Code Found:", authCode);
+      exchangeCodeForToken(authCode);
     } else {
-      console.log("Auth is still loading...");
+      console.error("No authorization code found in URL.");
+      setErrorMessage("Authentication failed: No authorization code provided.");
+      setLoading(false);
     }
-  }, [auth.isAuthenticated, auth.user, auth.isLoading, navigate]);
-
-  // Additional Debugging Logs
-  useEffect(() => {
-    console.log("Auth State Updated:", auth);
-  }, [auth]);
-
-  useEffect(() => {
-    console.log("Error Message Updated:", errorMessage);
-  }, [errorMessage]);
+  }, [location, navigate]);
 
   // UI Feedback
-  if (auth.isLoading || loading) {
+  if (loading) {
     return <div>Loading authentication...</div>;
-  }
-
-  if (auth.error) {
-    return <div>Error: {auth.error.message}</div>;
   }
 
   if (errorMessage) {
