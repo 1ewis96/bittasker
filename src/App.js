@@ -7,9 +7,10 @@ import Wallet from './pages/Wallet';
 import Map from './pages/Map';
 import Swap from './pages/Swap';
 import Settings from './pages/Settings';
-import CognitoCallback from './auth/CognitoCallback';
-import CognitoCallbackClear from './auth/CognitoCallbackClear';
+import CognitoCallback from './hooks/auth/CognitoCallback';
+import CognitoCallbackClear from './hooks/auth/CognitoCallbackClear';
 
+import useAuthCheck from "./hooks/auth/TokenValidation";
 
 
 function App() {
