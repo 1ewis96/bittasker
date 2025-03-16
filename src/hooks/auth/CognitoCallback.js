@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from 'jwt-decode';
-
+import { jwtDecode } from "jwt-decode";
 
 const CognitoCallback = () => {
   const auth = useAuth();
@@ -13,11 +12,14 @@ const CognitoCallback = () => {
 
   useEffect(() => {
     const authenticateUser = async () => {
+      console.log("Authenticating user...");
       if (auth.isAuthenticated && auth.user?.id_token) {
         try {
+          console.log("ID Token found:", auth.user.id_token);
+
           const { id_token, access_token, refresh_token } = auth.user;
-          const decodedIdToken = jwtDecode(id_token); // Using jwt-decode to decode the token
-          const expiresAt = decodedIdToken.exp * 1000; // Convert to milliseconds
+          const decodedIdToken = jwtDecode(id_token);
+          const expiresAt = decodedIdToken.exp * 1000;
 
           // Store the tokens and expiry time
           localStorage.setItem("id_token", id_token);
@@ -36,10 +38,10 @@ const CognitoCallback = () => {
             }
           );
 
-          // Handle API response
           if (response.status === 200) {
             const data = response.data;
             if (data.message === "User verified") {
+              console.log("User verified, redirecting...");
               navigate("/"); // Redirect user to home page on success
             } else {
               setErrorMessage("Unexpected response from the server.");
@@ -51,17 +53,20 @@ const CognitoCallback = () => {
           console.error("Error during API call:", error);
           setErrorMessage("An error occurred while verifying the user.");
         } finally {
-          setLoading(false);
+          setLoading(false); // Stop loading after API call completes
         }
       } else {
+        console.log("No ID token found, authentication failed.");
         setErrorMessage("Authentication failed or missing ID token.");
         setLoading(false);
       }
     };
 
-    // Only trigger authentication when auth is loaded and authenticated
     if (!auth.isLoading && auth.isAuthenticated) {
+      console.log("Auth is loaded and authenticated.");
       authenticateUser();
+    } else {
+      console.log("Auth is still loading or not authenticated.");
     }
   }, [auth.isAuthenticated, auth.user?.id_token, auth.isLoading, navigate]);
 
