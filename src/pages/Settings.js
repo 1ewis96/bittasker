@@ -4,10 +4,13 @@ import useAuthCheck from "../hooks/auth/TokenValidation"; // Import the useAuthC
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import axios from "axios";
+import { useUser } from "../context/UserContext";
 
 const Settings = () => {
   const { isAuthenticated } = useAuthCheck(); // Removed unused 'loading' and 'errorMessage'
   
+  const { refreshUserData } = useUser();
+	
   const apiUrl = process.env.REACT_APP_HOST_API_URL;
   const s3Url = process.env.REACT_APP_S3_URL; // Get the S3 URL from the env variables
   const avatarLocation = process.env.REACT_APP_AVATAR_S3_LOCATION; // Get the Avatar Location from the env variables
@@ -69,6 +72,8 @@ const Settings = () => {
       );
       setSelectedAvatar(avatarId); // Update selected avatar
       console.log("Avatar updated successfully:", response.data);
+	  refreshUserData();
+	  
     } catch (error) {
       console.error("Error updating avatar", error);
     }
