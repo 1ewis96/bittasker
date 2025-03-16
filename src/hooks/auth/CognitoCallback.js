@@ -26,7 +26,7 @@ const CognitoCallback = () => {
         return;
       }
 
-      const tokenEndpoint = `https://${cognitoDomain}/oauth2/token`;
+      const tokenEndpoint = `${cognitoDomain}/oauth2/token`;
       const params = new URLSearchParams({
         grant_type: "authorization_code",
         client_id: clientId,
