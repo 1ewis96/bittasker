@@ -77,8 +77,8 @@ const CognitoCallback = () => {
 
   // Call handleAuthentication once the component is mounted
   React.useEffect(() => {
-    handleAuthentication();
-  }, []); // DO NOT ADD DEPENDCY HERE.
+    handleAuthentication(); // eslint-disable-next-line
+  }, []);
 
   if (loading) return <div>Loading authentication...</div>;
   if (errorMessage) return <div>Error: {errorMessage}</div>;
