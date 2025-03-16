@@ -13,6 +13,8 @@ const CognitoCallback = () => {
   useEffect(() => {
     const authenticateUser = async () => {
       console.log("Authenticating user...");
+
+      // Check if auth is loaded and authenticated
       if (auth.isAuthenticated && auth.user?.id_token) {
         try {
           console.log("ID Token found:", auth.user.id_token);
@@ -62,18 +64,26 @@ const CognitoCallback = () => {
       }
     };
 
+    // Only trigger authentication when auth is loaded and authenticated
     if (!auth.isLoading && auth.isAuthenticated) {
       console.log("Auth is loaded and authenticated.");
       authenticateUser();
     } else {
       console.log("Auth is still loading or not authenticated.");
     }
-  }, [auth.isAuthenticated, auth.user?.id_token, auth.isLoading, navigate]);
+  }, [auth.isAuthenticated, auth.user, auth.isLoading, navigate]); // Include auth.user in the dependency array
 
+  // Show loading indicator if auth is still loading
+  if (auth.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // If there's an authentication error
   if (auth.error) {
     return <div>Error: {auth.error.message}</div>;
   }
 
+  // Handle the error message or the successful state
   if (loading) {
     return <div>Loading...</div>;
   }
