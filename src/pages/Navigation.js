@@ -62,12 +62,12 @@ const Navigation = () => {
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Hello: {userData?.profile?.email}
+                      Hello: {userData?.username}
                     </pre>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
                     <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      ID Token: {userData?.id_token}
+                      Email: {userData?.email}
                     </pre>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
