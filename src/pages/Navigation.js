@@ -70,16 +70,6 @@ const Navigation = () => {
                       Email: {userData?.email}
                     </pre>
                   </Dropdown.Item>
-                  <Dropdown.Item disabled>
-                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Access Token: {userData?.access_token}
-                    </pre>
-                  </Dropdown.Item>
-                  <Dropdown.Item disabled>
-                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      Refresh Token: {userData?.refresh_token}
-                    </pre>
-                  </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/settings">
                     Settings
                   </Dropdown.Item>
