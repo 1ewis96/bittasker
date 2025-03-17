@@ -170,7 +170,7 @@ const Settings = () => {
                       alt="MetaMask logo"
                     />
                   </Button>
-			  )};
+			  )}
 			  </Card.Body>
 			  </Card>
 			</Col>
