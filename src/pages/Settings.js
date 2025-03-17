@@ -120,7 +120,24 @@ const Settings = () => {
           <Col md={8} lg={6}>
             <Card className="p-4 text-center bg-dark text-white">
               <Card.Body>
-			  Connect Metamask.
+			                    <Button
+                    variant="dark"
+                    style={{
+                      backgroundColor: "#000",
+                    }}
+                    onClick={connectMetaMask}
+                    disabled={isLoading} // Disable button while loading
+                  >
+                    {isLoading ? "Connecting..." : "Connect to MetaMask"}
+                    <img
+                      src={`${s3Bucket}/static/metamask-logo.png`}
+                      height="20px"
+                      style={{
+                        marginLeft: "5px",
+                      }}
+                      alt="MetaMask logo"
+                    />
+                  </Button>
 			  </Card.Body>
 			  </Card>
 			</Col>
