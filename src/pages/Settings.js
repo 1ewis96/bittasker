@@ -85,6 +85,10 @@ const Settings = () => {
       <Container>
         {isAuthenticated ? (
           <>
+		 <Row className="justify-content-center">
+          <Col md={8} lg={6}>
+            <Card className="p-4 text-center bg-dark text-white">
+              <Card.Body>
             <h3>Choose your avatar</h3>
             <Row>
               {avatars.map((avatar) => (
@@ -106,6 +110,10 @@ const Settings = () => {
                 </Col>
               ))}
             </Row>
+              </Card.Body>
+			  </Card>
+			  </Col>
+			  </Row>
           </>
         ) : (
           <p>You are not authenticated</p>
