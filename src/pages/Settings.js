@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import useAuthCheck from "../hooks/auth/TokenValidation"; // Import the useAuthCheck hook
 import Navigation from "./Navigation";
 import Footer from "./Footer";
@@ -18,7 +18,17 @@ const Settings = () => {
 
   const [avatars, setAvatars] = useState([]);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const s3Bucket = process.env.REACT_APP_S3_URL;
+  const [isLoading, setIsLoading] = useState(false); // To show loading state while waiting for backend calls
 
+  const connectMetaMask = async () => {
+	  
+  };
+  
+  const disconnectMetaMask = async () => {
+	  
+  };
+    
   // Memoize fetchAvatars using useCallback
   const fetchAvatars = useCallback(async () => {
     if (!isAuthenticated) return; // Ensure user is authenticated
@@ -120,6 +130,8 @@ const Settings = () => {
           <Col md={8} lg={6}>
             <Card className="p-4 text-center bg-dark text-white">
               <Card.Body>
+			  
+			  {!useUser.ethAddress ? (
 			                    <Button
                     variant="dark"
                     style={{
@@ -138,9 +150,31 @@ const Settings = () => {
                       alt="MetaMask logo"
                     />
                   </Button>
+				  ) : (
+				  	
+					<Button
+                    variant="dark"
+                    style={{
+                      backgroundColor: "#000",
+                    }}
+                    onClick={disconnectMetaMask}
+                    disabled={isLoading} // Disable button while loading
+                  >
+                    {isLoading ? "Connecting..." : "Unlink MetaMask"}
+                    <img
+                      src={`${s3Bucket}/static/metamask-logo.png`}
+                      height="20px"
+                      style={{
+                        marginLeft: "5px",
+                      }}
+                      alt="MetaMask logo"
+                    />
+                  </Button>
+			  )};
 			  </Card.Body>
 			  </Card>
 			</Col>
+			</Row>
           </>
         ) : (
           <p>You are not authenticated</p>
