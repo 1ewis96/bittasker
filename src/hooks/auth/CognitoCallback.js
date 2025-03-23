@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../../context/UserContext";
+import { LoadingScreen } from "../../modules/Loading";
 
 const cognitoDomain = process.env.REACT_APP_COGNITO_URL;
 const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
@@ -80,7 +81,7 @@ const CognitoCallback = () => {
     handleAuthentication(); // eslint-disable-next-line
   }, []);
 
-  if (loading) return <div>Loading authentication...</div>;
+  if (loading) return <LoadingScreen />;
   if (errorMessage) return <div>Error: {errorMessage}</div>;
   return <div>Creating session...</div>;
 };
