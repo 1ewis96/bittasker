@@ -20,7 +20,7 @@ const WhitePaper = () => {
       <section
         className="hero-section text-center text-white py-5"
         style={{
-          backgroundImage: `url('https://via.placeholder.com/1600x800')`,
+          backgroundImage: `url('https://placehold.co/600x400/EEE/31343C')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
