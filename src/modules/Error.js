@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Alert } from "react-bootstrap";
 
 const ErrorScreen = ({ message }) => {

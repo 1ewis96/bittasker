@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../../context/UserContext";
-import { LoadingScreen } from "../../modules/Loading";
-import { errorMessage } from "../../modules/Error";
+import LoadingScreen from "../../modules/Loading";
+import ErrorScreen from "../../modules/Error";
 
 const cognitoDomain = process.env.REACT_APP_COGNITO_URL;
 const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;

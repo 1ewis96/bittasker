@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Spinner, ProgressBar, Card } from "react-bootstrap";
 
 const LoadingScreen = () => {
