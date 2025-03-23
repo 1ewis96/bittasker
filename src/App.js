@@ -22,6 +22,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/white-paper" element={<WhitePaper />} />
           <Route path="/map" element={<Map />} />
           <Route path="/swap" element={<Swap />} />
           <Route path="/auth/callback" element={<CognitoCallback />} />
