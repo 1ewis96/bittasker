@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Container, Navbar, Nav, Dropdown, Spinner } from "react-bootstrap";
+import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import { FaSignInAlt, FaUserPlus, FaLock } from "react-icons/fa";
 import useAuthCheck from "../hooks/auth/TokenValidation"; // Import the useAuthCheck hook
 import { useUser } from "../context/UserContext"; // Import the useUser hook
 
 const Navigation = () => {
+  // Authentication Check (using useAuthCheck)
   const { isAuthenticated } = useAuthCheck();
+
+  // User Data from Context
   const { userData } = useUser();
 
-  const [loading, setLoading] = useState(true);
   const cognitoURL = process.env.REACT_APP_COGNITO_URL;
   const s3Bucket = process.env.REACT_APP_S3_URL;
   const cognitoClientID = process.env.REACT_APP_COGNITO_CLIENT_ID;
   const logoutReturnURL = process.env.REACT_APP_LOGOUT_RETURN_URL;
   const signupReturnURL = process.env.REACT_APP_SIGNUP_RETURN_URL;
   const forgotPasswordReturnURL = process.env.REACT_APP_FORGOT_PASSWORD_RETURN_URL;
-
-  useEffect(() => {
-    if (userData !== null && userData !== undefined) {
-      setLoading(false); // Stop loading when user data is available
-    }
-  }, [userData]);
 
   return (
     <Navbar bg="dark" variant="dark" expand={true}>
@@ -40,6 +36,7 @@ const Navigation = () => {
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto"></Nav>
 
+          {/* Authenticated State */}
           {isAuthenticated ? (
             <Nav>
               <Dropdown align="end">
@@ -48,27 +45,19 @@ const Navigation = () => {
                   id="profile-dropdown"
                   className="d-flex align-items-center"
                 >
-                  {/* Show spinner if loading */}
-                  {loading ? (
-                    <Spinner animation="border" variant="light" size="sm" />
-                  ) : (
-                    <img
-                      src={
-                        userData?.avatar?.path
-                          ? `${s3Bucket}/avatars/${userData.avatar.path}`
-                          : `${s3Bucket}/avatars/default.jpg`
-                      }
-                      alt="Profile"
-                      width="40"
-                      height="40"
-                      style={{
-                        borderRadius: "50%",
-                        marginRight: "10px",
-                        objectFit: "cover",
-                        border: "3px solid #fff",
-                      }}
-                    />
-                  )}
+                  {/* Use userData.avatar.path if available */}
+                  <img
+                    src={userData?.avatar?.path ? `${s3Bucket}/avatars/${userData.avatar.path}` : `${s3Bucket}/avatars/default.jpg`}
+                    alt="Profile"
+                    width="40"
+                    height="40"
+                    style={{
+                      borderRadius: "50%",
+                      marginRight: "10px",
+                      objectFit: "cover",
+                      border: "3px solid #fff",
+                    }}
+                  />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
@@ -84,7 +73,7 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/settings">
                     Settings
                   </Dropdown.Item>
-                  <Dropdown.Item
+                  <Dropdown.Item 
                     onClick={() => {
                       const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
                       window.location.href = logoutUrl;
@@ -96,6 +85,7 @@ const Navigation = () => {
               </Dropdown>
             </Nav>
           ) : (
+            // Unauthenticated State
             <Nav>
               <Dropdown align="end">
                 <Dropdown.Toggle
@@ -119,19 +109,21 @@ const Navigation = () => {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     className="d-flex justify-content-between align-items-center"
-                    href={`${cognitoURL}/login?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`}
+                    href={`${cognitoURL}/login?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`} // Direct URL
                   >
                     Sign In <FaSignInAlt className="ms-2" />
                   </Dropdown.Item>
+
                   <Dropdown.Item
                     className="d-flex justify-content-between align-items-center"
-                    href={`${cognitoURL}/signup?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`}
+                    href={`${cognitoURL}/signup?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${signupReturnURL}`} // Direct URL
                   >
                     Sign Up <FaUserPlus className="ms-2" />
                   </Dropdown.Item>
+
                   <Dropdown.Item
                     className="d-flex justify-content-between align-items-center"
-                    href={`${cognitoURL}/forgotPassword?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${forgotPasswordReturnURL}`}
+                    href={`${cognitoURL}/forgotPassword?client_id=${cognitoClientID}&response_type=code&scope=openid&redirect_uri=${forgotPasswordReturnURL}`} // Direct URL
                   >
                     Forgot Password <FaLock className="ms-2" />
                   </Dropdown.Item>
