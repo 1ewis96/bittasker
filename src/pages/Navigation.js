@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
+import { Container, Navbar, Nav, Dropdown, Badge } from "react-bootstrap";
 import { FaSignInAlt, FaUserPlus, FaLock } from "react-icons/fa";
 import useAuthCheck from "../hooks/auth/TokenValidation"; // Import the useAuthCheck hook
 import { useUser } from "../context/UserContext"; // Import the useUser hook
@@ -58,6 +58,23 @@ const Navigation = () => {
                       border: "3px solid #fff",
                     }}
                   />
+				  
+				    <Badge
+					bg=""
+					style={{
+					  backgroundColor: 'rgba(255, 193, 7, 0.25)', // slightly more visible background
+					  color: '#fff', // darker text for better readability
+					  border: '1px solid #d39e00',
+					  borderRadius: '4px',
+					  padding: '3px 8px',
+					  fontWeight: 700, // increased font weight
+					  fontSize: '0.75rem',
+					  marginRight: '8px', // added spacing after badge
+					  userSelect: 'none',
+					}}
+				  >
+					0.00 TASK
+				  </Badge>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
@@ -104,7 +121,8 @@ const Navigation = () => {
                       objectFit: "cover",
                       border: "3px solid #fff",
                     }}
-                  />
+                  /> 
+
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
