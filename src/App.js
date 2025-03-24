@@ -7,7 +7,7 @@ import Wallet from './pages/Wallet';
 import Map from './pages/Map';
 import Swap from './pages/Swap';
 import WhitePaper from './pages/WhitePaper';
-import Settings from './pages/Settings';
+import Settings from './pages/Settings/Settings';
 import CognitoCallback from './hooks/auth/CognitoCallback';
 import CognitoCallbackClear from './hooks/auth/CognitoCallbackClear';
 

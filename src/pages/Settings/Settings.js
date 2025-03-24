@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Container, Row, Col, Card, Button, Spinner, Modal, Form } from "react-bootstrap";
-import useAuthCheck from "../hooks/auth/TokenValidation";
-import Navigation from "./Navigation";
-import Footer from "./Footer";
+import useAuthCheck from "../../hooks/auth/TokenValidation";
+import Navigation from "../Navigation";
+import Footer from "../Footer";
 import axios from "axios";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../context/UserContext";
 
 const Settings = () => {
   const { isAuthenticated } = useAuthCheck();
