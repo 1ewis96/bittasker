@@ -12,7 +12,7 @@ const Wallet = () => {
   const { refreshUserData, userData } = useUser();
 
   const s3Bucket = process.env.REACT_APP_S3_URL;
-  const authToken = localStorage.getItem("auth_token");
+  const authToken = localStorage.getItem("access_token");
 
   useEffect(() => {
     if (userData && userData.ethAddress) {
