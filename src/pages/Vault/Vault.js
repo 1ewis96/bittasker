@@ -47,9 +47,15 @@ const Vault = () => {
 
   const lockDuration = Math.floor((percentage / 100) * maxLockDays);
 
+  const [hasFetched, setHasFetched] = useState(false);
+
   useEffect(() => {
-    fetchStakes();
-  }, [fetchStakes]);
+    if (!hasFetched) {
+      fetchStakes();
+      setHasFetched(true);
+    }
+  }, [fetchStakes, hasFetched]);
+  
 
   const fetchEstimate = async (parsedAmount) => {
     try {

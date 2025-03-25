@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ethers } from "ethers";
 import StakingVault from "../abis/StakingVault.json";
 import ERC20 from "../abis/ERC20.json";
@@ -126,13 +126,13 @@ export const useStakingVault = () => {
     console.log("✅ Unstaked");
   };
 
-  const fetchStakes = async () => {
+  const fetchStakes = useCallback(async () => {
     if (!account || !stakingContract) return;
     console.log("📊 Fetching stakes...");
     const userStakes = await stakingContract.getUserStakes(account);
     setStakes(userStakes);
     console.log("✅ Stakes fetched:", userStakes);
-  };
+  }, [account, stakingContract]);
 
   const previewReward = async (amount, lockDays) => {
     if (!stakingContract) return "0.00";
