@@ -17,11 +17,11 @@ import "react-circular-progressbar/dist/styles.css";
 import { FaLock } from "react-icons/fa";
 import Navigation from "../Navigation";
 import Footer from "../Footer";
-import { ethers } from "ethers";
 import { useStakingVault } from "../../hooks/useStakingVault";
+import { ethers } from "ethers";
 
 const formatDate = (timestamp) => {
-  const d = new Date(Number(timestamp) * 1000);
+  const d = new Date(Number(timestamp) * 1000); // safe BigInt to number
   return d.toLocaleDateString();
 };
 
@@ -173,7 +173,7 @@ const Vault = () => {
 
           {/* Dashboard Section */}
           <Col md={6}>
-            <Card className="p-4 bg-light shadow rounded-4 mb-4 bg-dark">
+            <Card className="p-4 bg-light shadow rounded-4 mb-4">
               <Card.Body>
                 <h4 className="mb-3">📊 Your Stakes</h4>
                 {stakes.length === 0 ? (
@@ -200,9 +200,9 @@ const Vault = () => {
                           withdrawn,
                         } = stake;
 
-                        const start = Number(startTime);
-                        const unlockTime = start + lockDuration * 86400;
-                        const now = Math.floor(Date.now() / 1000);
+                        const start = BigInt(startTime);
+                        const unlockTime = start + BigInt(lockDuration) * BigInt(86400);
+                        const now = BigInt(Math.floor(Date.now() / 1000));
                         const isUnlocked = now >= unlockTime;
 
                         return (
