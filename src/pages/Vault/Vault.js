@@ -1,3 +1,4 @@
+/* global BigInt */
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -19,12 +20,24 @@ import Navigation from "../Navigation";
 import Footer from "../Footer";
 import { useStakingVault } from "../../hooks/useStakingVault";
 import { ethers } from "ethers";
-
-/* global BigInt */
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formatDate = (timestamp) => {
   const d = new Date(Number(timestamp) * 1000);
   return d.toLocaleDateString();
+};
+
+const getTimeRemaining = (endTimestamp) => {
+  const now = Math.floor(Date.now() / 1000);
+  const diff = endTimestamp - now;
+
+  if (diff <= 0) return "Unlocked";
+
+  const days = Math.floor(diff / 86400);
+  const hours = Math.floor((diff % 86400) / 3600);
+  const minutes = Math.floor((diff % 3600) / 60);
+  return `${days}d ${hours}h ${minutes}m`;
 };
 
 const Vault = () => {
@@ -48,12 +61,8 @@ const Vault = () => {
   const lockDuration = Math.floor((percentage / 100) * maxLockDays);
 
   useEffect(() => {
-    if (account) {
-      fetchStakes();
-    }
+    if (account) fetchStakes();
   }, [account, fetchStakes]);
-  
-  
 
   const fetchEstimate = async (parsedAmount) => {
     try {
@@ -69,7 +78,6 @@ const Vault = () => {
     const timeout = setTimeout(() => {
       const parsed = parseFloat(amount);
       if (!isNaN(parsed) && parsed > 0 && lockDuration >= minLockDays) {
-        console.log("🔁 Triggering reward estimate...");
         fetchEstimate(parsed);
       } else {
         setEstimatedEarnings("0.00");
@@ -86,43 +94,41 @@ const Vault = () => {
       lockDuration < minLockDays ||
       lockDuration > maxLockDays
     ) {
-      alert(
-        `❌ Please enter a valid amount and lock duration between ${minLockDays} and ${maxLockDays} days.`
-      );
+      toast.error(`❌ Enter amount & lock duration between ${minLockDays}–${maxLockDays} days.`);
       return;
     }
 
     try {
-      console.log("🚀 Staking tokens...");
       await stakeTokens(parsedAmount, lockDuration);
-      alert("✅ Tokens successfully staked!");
+      toast.success("✅ Tokens staked!");
       await fetchStakes();
     } catch (error) {
-      console.error("❌ Error staking tokens:", error);
-      alert("❌ Error staking tokens. See console for details.");
+      console.error("❌ Error staking:", error);
+      toast.error("❌ Stake failed. See console for details.");
     }
   };
 
   const handleUnstake = async (index) => {
     const stake = stakes[index];
-    const { withdrawn } = stake;
-    if (withdrawn) return;
+    if (stake.withdrawn) return;
 
     if (!window.confirm("Are you sure you want to unstake?")) return;
 
     try {
       setUnstakeLoadingIndex(index);
-      console.log(`🔓 Unstaking index ${index}...`);
       await unstake(index);
-      alert("✅ Unstaked successfully!");
+      toast.success("✅ Unstaked successfully!");
       await fetchStakes();
     } catch (error) {
       console.error("❌ Failed to unstake:", error);
-      alert("❌ Failed to unstake. See console for details.");
+      toast.error("❌ Unstake failed.");
     } finally {
       setUnstakeLoadingIndex(null);
     }
   };
+
+  const activeStakes = stakes.filter((s) => !s.withdrawn);
+  const withdrawnStakes = stakes.filter((s) => s.withdrawn);
 
   return (
     <>
@@ -202,77 +208,52 @@ const Vault = () => {
 
           {/* Dashboard Section */}
           <Col md={6}>
-            <Card className="p-4 bg-light shadow rounded-4 mb-4 bg-dark">
+            <Card className="p-4 bg-light shadow rounded-4 mb-4">
               <Card.Body>
-                <h4 className="mb-3">📊 Your Stakes</h4>
-                {stakes.length === 0 ? (
+                <h4 className="mb-3">📊 Active Stakes</h4>
+                {activeStakes.length === 0 ? (
                   <p>No active stakes yet.</p>
                 ) : (
                   <Table striped bordered hover responsive>
                     <thead>
                       <tr>
                         <th>Amount</th>
-                        <th>Start</th>
-                        <th>Unlock</th>
-                        <th>Duration</th>
+                        <th>Unlocks In</th>
                         <th>APY</th>
                         <th>Reward</th>
-                        <th>Status</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {stakes.map((stake, i) => {
-                        const {
-                          amount,
-                          startTime,
-                          lockDuration,
-                          apy,
-                          withdrawn,
-                        } = stake;
-
+                      {activeStakes.map((stake, i) => {
+                        const { amount, startTime, lockDuration, apy, withdrawn } = stake;
                         const start = BigInt(startTime);
-                        const unlockTime = start + BigInt(lockDuration);
+                        const unlockTime = start + BigInt(lockDuration) * BigInt(86400);
                         const now = BigInt(Math.floor(Date.now() / 1000));
                         const isUnlocked = now >= unlockTime;
-                        const parsedAmount = parseFloat(
-                          ethers.formatUnits(amount, 18)
-                        );
-                        const reward =
-                          parsedAmount *
-                          (Number(apy) / 100) *
-                          (Number(lockDuration) / 365);
+
+                        const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
+                        const reward = parsedAmount * (Number(apy) / 100) * (Number(lockDuration) / 365);
+                        const countdown = getTimeRemaining(Number(unlockTime));
 
                         return (
                           <tr key={i}>
-                            <td>
-                              {parsedAmount.toFixed(2)}{" "}
-                              <span className="text-muted">TOKEN</span>
-                            </td>
-                            <td>{formatDate(start)}</td>
-                            <td>{formatDate(unlockTime)}</td>
-                            <td>{lockDuration} days</td>
+                            <td>{parsedAmount.toFixed(2)} TOKEN</td>
+                            <td>{countdown}</td>
                             <td>{Number(apy)}%</td>
                             <td>{reward.toFixed(4)}</td>
                             <td>
-                              {withdrawn ? (
-                                <Badge bg="secondary">Withdrawn</Badge>
-                              ) : (
-                                <Button
-                                  size="sm"
-                                  variant={isUnlocked ? "success" : "danger"}
-                                  onClick={() => handleUnstake(i)}
-                                  disabled={unstakeLoadingIndex === i}
-                                >
-                                  {unstakeLoadingIndex === i ? (
-                                    <Spinner
-                                      animation="border"
-                                      size="sm"
-                                      className="me-2"
-                                    />
-                                  ) : null}
-                                  {isUnlocked ? "Unstake" : "Early Unstake"}
-                                </Button>
-                              )}
+                              <Button
+                                size="sm"
+                                variant={isUnlocked ? "success" : "danger"}
+                                onClick={() => handleUnstake(i)}
+                                disabled={unstakeLoadingIndex === i}
+                              >
+                                {unstakeLoadingIndex === i ? (
+                                  <Spinner animation="border" size="sm" className="me-2" />
+                                ) : null}
+                                {isUnlocked ? "Unstake" : "Early Unstake"}
+                              </Button>
                             </td>
                           </tr>
                         );
@@ -280,11 +261,43 @@ const Vault = () => {
                     </tbody>
                   </Table>
                 )}
+
+                {withdrawnStakes.length > 0 && (
+                  <>
+                    <hr />
+                    <h5 className="mt-4">📜 Unstaked History</h5>
+                    <Table size="sm" bordered hover responsive>
+                      <thead>
+                        <tr>
+                          <th>Amount</th>
+                          <th>Start</th>
+                          <th>Duration</th>
+                          <th>APY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {withdrawnStakes.map((stake, i) => {
+                          const { amount, startTime, lockDuration, apy } = stake;
+                          const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
+                          return (
+                            <tr key={i}>
+                              <td>{parsedAmount.toFixed(2)} TOKEN</td>
+                              <td>{formatDate(startTime)}</td>
+                              <td>{Math.floor(Number(lockDuration) / 86400)} days</td>
+                              <td>{Number(apy)}%</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                  </>
+                )}
               </Card.Body>
             </Card>
           </Col>
         </Row>
       </Container>
+      <ToastContainer position="bottom-right" autoClose={4000} hideProgressBar />
       <Footer />
     </>
   );
