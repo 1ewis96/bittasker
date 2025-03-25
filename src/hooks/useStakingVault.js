@@ -33,7 +33,8 @@ export const useStakingVault = () => {
         const address = await signer.getAddress();
 
         const staking = new ethers.Contract(STAKING_CONTRACT, StakingVault?.abi || [], signer);
-        const token = new ethers.Contract(TOKEN_CONTRACT, ERC20?.abi || [], signer);
+        const token = new ethers.Contract(TOKEN_CONTRACT, undefined || [], signer);
+
 
         console.log("✅ Wallet connected:", address);
 
