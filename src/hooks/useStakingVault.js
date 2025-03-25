@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import StakingVaultABI from "../abis/StakingVault.json";
-import ERC20ABI from "../abis/ERC20.json";
+import StakingVault from "../abis/StakingVault.json";
+import ERC20 from "../abis/ERC20.json";
 
 const STAKING_CONTRACT = "0xf9aC00a1efb05d6F62Da307c0D8E5ce6c36E0905";
 const TOKEN_CONTRACT = "0x28D42ef7c9703265f20aaa952f0f179d669f07F3";
@@ -20,8 +20,8 @@ export const useStakingVault = () => {
       const init = async () => {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
-        const staking = new ethers.Contract(STAKING_CONTRACT, StakingVaultABI, signer);
-        const token = new ethers.Contract(TOKEN_CONTRACT, ERC20ABI, signer);
+        const staking = new ethers.Contract(STAKING_CONTRACT, StakingVault.abi, signer);
+        const token = new ethers.Contract(TOKEN_CONTRACT, ERC20.abi, signer);
         const address = await signer.getAddress();
 
         setProvider(provider);
