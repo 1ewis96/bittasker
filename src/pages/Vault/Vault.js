@@ -17,6 +17,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { FaLock } from "react-icons/fa";
 import Navigation from "../Navigation";
 import Footer from "../Footer";
+import { ethers } from "ethers";
 import { useStakingVault } from "../../hooks/useStakingVault";
 
 const formatDate = (timestamp) => {
@@ -172,7 +173,7 @@ const Vault = () => {
 
           {/* Dashboard Section */}
           <Col md={6}>
-            <Card className="p-4 bg-light shadow rounded-4 mb-4">
+            <Card className="p-4 bg-light shadow rounded-4 mb-4 bg-dark">
               <Card.Body>
                 <h4 className="mb-3">📊 Your Stakes</h4>
                 {stakes.length === 0 ? (
