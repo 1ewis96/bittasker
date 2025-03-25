@@ -42,9 +42,14 @@ const Navigation = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
+      // Only run once on hard refresh
       fetchBalance();
+  
+      // Optional: expose to window for external script calls
+      window.fetchUserBalance = fetchBalance;
     }
-  }, [isAuthenticated]);
+  }, []); // empty deps = only once
+  
 
   const s3Bucket = process.env.REACT_APP_S3_URL;
   const cognitoURL = process.env.REACT_APP_COGNITO_URL;
