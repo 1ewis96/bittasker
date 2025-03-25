@@ -16,18 +16,27 @@ export const useStakingVault = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!window.ethereum) return;
-  
+    if (!window.ethereum) {
+      console.warn("MetaMask not detected");
+      return;
+    }
+
     let cancelled = false;
-  
+
     const init = async () => {
       try {
+        console.log("🔄 Requesting wallet connection...");
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+
         const staking = new ethers.Contract(STAKING_CONTRACT, StakingVault?.abi || [], signer);
         const token = new ethers.Contract(TOKEN_CONTRACT, ERC20?.abi || [], signer);
-        const address = await signer.getAddress();
-  
+
+        console.log("✅ Wallet connected:", address);
+
         if (!cancelled) {
           setProvider(provider);
           setSigner(signer);
@@ -36,38 +45,47 @@ export const useStakingVault = () => {
           setAccount(address);
         }
       } catch (error) {
-        console.error("Failed to initialize contracts:", error);
+        console.error("❌ Wallet or contract init failed:", error);
       }
     };
-  
+
     init();
-  
+
     return () => {
       cancelled = true;
     };
   }, []);
-  
 
   const approveTokens = async (amount) => {
     if (!tokenContract) throw new Error("Token contract not ready");
+    console.log("🔒 Approving tokens...");
     const tx = await tokenContract.approve(STAKING_CONTRACT, ethers.parseUnits(amount.toString(), 18));
+    console.log("⏳ Waiting for approve tx...");
     await tx.wait();
+    console.log("✅ Tokens approved");
   };
 
   const stakeTokens = async (amount, lockDays) => {
-    if (!window.ethereum || !stakingContract || !tokenContract || !signer || !account) {
-        alert("❌ Wallet not connected or contracts not ready");
-        return;
-      }
-      
+    if (!stakingContract || !tokenContract || !signer || !account) {
+      alert("❌ Wallet not connected or contracts not ready");
+      console.warn("Missing:", { stakingContract, tokenContract, signer, account });
+      return;
+    }
 
     setLoading(true);
     try {
-      await approveTokens(amount);
-      const tx = await stakingContract.stake(ethers.parseUnits(amount.toString(), 18), lockDays);
+      const parsedAmount = parseFloat(amount);
+      if (isNaN(parsedAmount) || parsedAmount <= 0 || lockDays <= 0) {
+        throw new Error("Invalid amount or lock duration");
+      }
+
+      await approveTokens(parsedAmount);
+      console.log("📥 Staking tokens...");
+      const tx = await stakingContract.stake(ethers.parseUnits(parsedAmount.toString(), 18), lockDays);
       await tx.wait();
+      console.log("✅ Staking complete");
     } catch (error) {
-      console.error("Stake failed:", error);
+      console.error("❌ Stake failed:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -76,23 +94,37 @@ export const useStakingVault = () => {
 
   const unstake = async (index) => {
     if (!stakingContract) return;
+    console.log("🔓 Unstaking...");
     const tx = await stakingContract.unstake(index);
     await tx.wait();
+    console.log("✅ Unstaked");
   };
 
   const fetchStakes = async () => {
     if (!account || !stakingContract) return;
+    console.log("📊 Fetching stakes...");
     const userStakes = await stakingContract.getUserStakes(account);
     setStakes(userStakes);
+    console.log("✅ Stakes fetched:", userStakes);
   };
 
   const previewReward = async (amount, lockDays) => {
     if (!stakingContract) return "0.00";
-    const reward = await stakingContract.previewReward(
-      ethers.parseUnits(amount.toString(), 18),
-      lockDays
-    );
-    return ethers.formatUnits(reward, 18);
+
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0 || lockDays <= 0) return "0.00";
+
+    try {
+      const reward = await stakingContract.previewReward(
+        ethers.parseUnits(parsedAmount.toString(), 18),
+        lockDays
+      );
+      console.log("📈 Preview reward:", ethers.formatUnits(reward, 18));
+      return ethers.formatUnits(reward, 18);
+    } catch (err) {
+      console.error("❌ Failed to preview reward:", err);
+      return "0.00";
+    }
   };
 
   return {

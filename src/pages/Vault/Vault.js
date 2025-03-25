@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Form, Button, InputGroup, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  InputGroup,
+  Spinner,
+} from "react-bootstrap";
 import { motion } from "framer-motion";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -9,40 +18,52 @@ import Footer from "../Footer";
 import { useStakingVault } from "../../hooks/useStakingVault";
 
 const Vault = () => {
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const [percentage, setPercentage] = useState(0);
   const maxDurationDays = 365;
   const lockDuration = Math.floor((percentage / 100) * maxDurationDays);
   const [estimatedEarnings, setEstimatedEarnings] = useState("0.00");
 
-  const {
-    account,
-    stakeTokens,
-    loading,
-    previewReward
-  } = useStakingVault();
+  const { account, stakeTokens, loading, previewReward } = useStakingVault();
+
+  const fetchEstimate = async (parsedAmount) => {
+    try {
+      const reward = await previewReward(parsedAmount, lockDuration);
+      setEstimatedEarnings(reward);
+    } catch (err) {
+      console.error("❌ Failed to fetch estimate:", err);
+      setEstimatedEarnings("0.00");
+    }
+  };
 
   useEffect(() => {
-    const fetchEstimate = async () => {
-      if (!amount || !lockDuration) return setEstimatedEarnings("0.00");
-      try {
-        const reward = await previewReward(amount, lockDuration);
-        setEstimatedEarnings(reward);
-      } catch {
+    const timeout = setTimeout(() => {
+      const parsed = parseFloat(amount);
+      if (!isNaN(parsed) && parsed > 0 && lockDuration > 0) {
+        console.log("🔁 Triggering reward estimate...");
+        fetchEstimate(parsed);
+      } else {
         setEstimatedEarnings("0.00");
       }
-    };
-    fetchEstimate();
+    }, 500); // debounce delay
+
+    return () => clearTimeout(timeout);
   }, [amount, lockDuration, previewReward]);
 
   const handleStake = async () => {
-    if (!amount || !lockDuration) return;
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0 || lockDuration <= 0) {
+      alert("❌ Please enter a valid amount and lock duration.");
+      return;
+    }
+
     try {
-      await stakeTokens(amount, lockDuration);
+      console.log("🚀 Staking tokens...");
+      await stakeTokens(parsedAmount, lockDuration);
       alert("✅ Tokens successfully staked!");
     } catch (error) {
-      console.error(error);
-      alert("❌ Error staking tokens.");
+      console.error("❌ Error staking tokens:", error);
+      alert("❌ Error staking tokens. See console for details.");
     }
   };
 
@@ -86,7 +107,9 @@ const Vault = () => {
                   onChange={(e) => setPercentage(Number(e.target.value))}
                 />
 
-                <p className="mt-2">Lock Duration: <strong>{lockDuration} days</strong></p>
+                <p className="mt-2">
+                  Lock Duration: <strong>{lockDuration} days</strong>
+                </p>
 
                 <motion.div
                   className="bg-secondary rounded p-3 mt-4"
@@ -104,7 +127,11 @@ const Vault = () => {
                   onClick={handleStake}
                   disabled={loading}
                 >
-                  {loading ? <Spinner animation="border" size="sm" className="me-2" /> : <FaLock className="me-2" />}
+                  {loading ? (
+                    <Spinner animation="border" size="sm" className="me-2" />
+                  ) : (
+                    <FaLock className="me-2" />
+                  )}
                   {loading ? "Locking..." : "Lock Tokens"}
                 </Button>
               </Card.Body>
