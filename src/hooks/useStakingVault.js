@@ -118,6 +118,17 @@ export const useStakingVault = () => {
     }
   };
 
+  const getApyForLockDays = async (days) => {
+    if (!stakingContract) return 0;
+    try {
+      const apy = await stakingContract.getApyForLockDays(days);
+      return Number(apy);
+    } catch (err) {
+      console.error("❌ Failed to fetch APY:", err);
+      return 0;
+    }
+  };
+  
   const unstake = async (index) => {
     if (!stakingContract) return;
     console.log("🔓 Unstaking...");
@@ -169,5 +180,6 @@ export const useStakingVault = () => {
     loading,
     minLockDays,
     maxLockDays,
+    getApyForLockDays,
   };
 };

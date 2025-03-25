@@ -44,6 +44,7 @@ const Vault = () => {
   const [amount, setAmount] = useState("");
   const [percentage, setPercentage] = useState(0);
   const [estimatedEarnings, setEstimatedEarnings] = useState("0.00");
+  const [estimatedApy, setEstimatedApy] = useState(0);
   const [unstakeLoadingIndex, setUnstakeLoadingIndex] = useState(null);
 
   const {
@@ -53,6 +54,7 @@ const Vault = () => {
     fetchStakes,
     stakes,
     previewReward,
+    getApyForLockDays,
     minLockDays,
     maxLockDays,
     loading,
@@ -74,15 +76,25 @@ const Vault = () => {
     }
   };
 
+  const fetchApy = async (days) => {
+    const apy = await getApyForLockDays(days);
+    setEstimatedApy(apy);
+  };
+
   useEffect(() => {
+    const parsed = parseFloat(amount);
+    const valid = !isNaN(parsed) && parsed > 0 && lockDuration >= minLockDays;
+
     const timeout = setTimeout(() => {
-      const parsed = parseFloat(amount);
-      if (!isNaN(parsed) && parsed > 0 && lockDuration >= minLockDays) {
+      if (valid) {
         fetchEstimate(parsed);
+        fetchApy(lockDuration);
       } else {
         setEstimatedEarnings("0.00");
+        setEstimatedApy(0);
       }
     }, 500);
+
     return () => clearTimeout(timeout);
   }, [amount, lockDuration, previewReward, minLockDays]);
 
@@ -135,7 +147,6 @@ const Vault = () => {
       <Navigation />
       <Container className="mt-5">
         <Row>
-          {/* Vault Section */}
           <Col md={6}>
             <Card className="p-4 text-center bg-dark text-white shadow-lg rounded-4 mb-4">
               <Card.Body>
@@ -154,7 +165,7 @@ const Vault = () => {
                 <div style={{ width: 200, margin: "0 auto" }}>
                   <CircularProgressbar
                     value={percentage}
-                    text={`${percentage}%`}
+                    text={`${estimatedApy}% APY`}
                     styles={buildStyles({
                       textColor: "#fff",
                       pathColor: "#ffc107",
@@ -165,15 +176,14 @@ const Vault = () => {
 
                 <Form.Range
                   className="mt-4"
-                  min={0}
-                  max={100}
+                  min={minLockDays}
+                  max={maxLockDays}
                   value={percentage}
                   onChange={(e) => setPercentage(Number(e.target.value))}
                 />
 
                 <p className="mt-2">
-                  Lock Duration:{" "}
-                  <strong>{lockDuration} days</strong>{" "}
+                  Lock Duration: <strong>{lockDuration} days</strong>{" "}
                   <small className="text-muted">
                     (Min {minLockDays}, Max {maxLockDays})
                   </small>
@@ -206,9 +216,8 @@ const Vault = () => {
             </Card>
           </Col>
 
-          {/* Dashboard Section */}
           <Col md={6}>
-            <Card className="p-4 bg-light shadow rounded-4 mb-4 bg-dark">
+            <Card className="p-4 bg-light shadow rounded-4 mb-4 bg-dark text-white">
               <Card.Body>
                 <h4 className="mb-3">📊 Active Stakes</h4>
                 {activeStakes.length === 0 ? (
