@@ -163,11 +163,7 @@ const WhitePaper = () => {
     </li>
   </ul>
 
-  <p>
-    This staking model not only incentivizes players to remain invested in the platform but also contributes to the overall health and sustainability of the BitTasker token economy.
-  </p>
 </section>
-
 
             <section data-aos="fade-up" className="mb-5">
               <h2 className="text-center mb-4">8. Governance</h2>
