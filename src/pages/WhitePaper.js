@@ -48,6 +48,12 @@ const WhitePaper = () => {
               <p>
                 This white paper outlines the <strong>TASK</strong> tokenomics, including the token’s utility, distribution model, governance structure, and the mechanisms that ensure long-term sustainability and success.
               </p>
+              <p>
+              Task Smart Contract - 0x28D42ef7c9703265f20aaa952f0f179d669f07F3 <br></br>
+              Task Staking Contract - 
+
+              </p>
+            
             </section>
 
             <section data-aos="fade-up" className="mb-5">
@@ -126,17 +132,42 @@ const WhitePaper = () => {
               <h5>Airdrop:</h5>
               <p>10% of the total supply will be distributed via an airdrop to the community. The airdrop will be allocated based on community participation, engagement, and contributions.</p>
             </section>
-
             <section data-aos="fade-up" className="mb-5">
-              <h2 className="text-center mb-4">7. Staking Mechanism</h2>
-              <p>Staking plays a crucial role in maintaining the token’s ecosystem and incentivizing long-term engagement from players. The staking mechanism will allow players to:</p>
-              <ul className="list-unstyled">
-                <li>Lock up tokens for a specific period, earning rewards in the form of more TASK tokens.</li>
-                <li>Earn periodic rewards based on the amount staked and the length of time the tokens are locked up.</li>
-                <li>Higher rewards will be given for longer lockup periods, encouraging players to commit their tokens to the game economy.</li>
-              </ul>
-              <p><strong>APY:</strong> The annual percentage yield (APY) for staking will initially be set at 5-10%, with potential for adjustment based on the game’s economy and staking participation.</p>
-            </section>
+  <h2 className="text-center mb-4">7. Staking Mechanism</h2>
+  <p><strong>Staking Rewards Pool:</strong> 20% of Total Supply (200,000,000 TASK)</p>
+  <p>
+    Staking is a core component of the BitTasker ecosystem, designed to reward long-term commitment and reinforce token utility within the game economy. Players can lock their TASK tokens into a smart contract-based vault to earn additional TASK over time.
+  </p>
+
+  <h5 className="mt-4">Key Features:</h5>
+  <ul className="list-unstyled">
+    <li>
+      <strong>Flexible Lock Periods:</strong> Users can select how long they wish to stake their TASK tokens, from 30 to 365 days. The longer the lock-up duration, the higher the yield. This incentivizes deeper commitment to the ecosystem.
+    </li>
+    <li>
+      <strong>Continuous Reward Accrual:</strong> Rewards accrue in real-time, allowing users to monitor their earnings at any moment. This provides a dynamic and transparent staking experience, with rewards claimable at the end of the lock period or upon early withdrawal (with penalty).
+    </li>
+    <li>
+      <strong>Early Unstaking with Time-Weighted Penalty:</strong> Users may withdraw their stake before the lock period ends, but will incur a time-weighted penalty on unclaimed rewards. The penalty decreases the longer a stake is held:<br />
+      <code>Penalty (%) = 100 - (elapsedTime / lockDuration) × 100</code>
+    </li>
+    <li>
+      <strong>Linear APY Model:</strong> The staking contract calculates APY based on the selected lock duration. The APY linearly scales from <strong>5%</strong> (for 30-day locks) to <strong>10%</strong> (for 365-day locks), using the formula:<br />
+      <code>APY = 5% + (lockDuration / 365 days) × 5%</code>
+    </li>
+    <li>
+      <strong>Finite Reward Pool with Emission Decay:</strong> A fixed supply of <strong>200 million TASK</strong> tokens has been allocated for staking rewards. Over time, the emission rate may decrease to align with ecosystem maturity, user growth, and sustainable tokenomics.
+    </li>
+    <li>
+      <strong>On-Chain Transparency:</strong> All staking operations — including deposits, reward calculations, and penalties — are handled via auditable smart contracts, ensuring full transparency and trust.
+    </li>
+  </ul>
+
+  <p>
+    This staking model not only incentivizes players to remain invested in the platform but also contributes to the overall health and sustainability of the BitTasker token economy.
+  </p>
+</section>
+
 
             <section data-aos="fade-up" className="mb-5">
               <h2 className="text-center mb-4">8. Governance</h2>
