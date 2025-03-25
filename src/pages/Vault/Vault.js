@@ -20,11 +20,18 @@ import { useStakingVault } from "../../hooks/useStakingVault";
 const Vault = () => {
   const [amount, setAmount] = useState("");
   const [percentage, setPercentage] = useState(0);
-  const maxDurationDays = 365;
-  const lockDuration = Math.floor((percentage / 100) * maxDurationDays);
   const [estimatedEarnings, setEstimatedEarnings] = useState("0.00");
 
-  const { account, stakeTokens, loading, previewReward } = useStakingVault();
+  const {
+    account,
+    stakeTokens,
+    loading,
+    previewReward,
+    minLockDays,
+    maxLockDays,
+  } = useStakingVault();
+
+  const lockDuration = Math.floor((percentage / 100) * maxLockDays);
 
   const fetchEstimate = async (parsedAmount) => {
     try {
@@ -39,21 +46,25 @@ const Vault = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       const parsed = parseFloat(amount);
-      if (!isNaN(parsed) && parsed > 0 && lockDuration > 0) {
+      if (!isNaN(parsed) && parsed > 0 && lockDuration >= minLockDays) {
         console.log("🔁 Triggering reward estimate...");
         fetchEstimate(parsed);
       } else {
         setEstimatedEarnings("0.00");
       }
-    }, 500); // debounce delay
-
+    }, 500);
     return () => clearTimeout(timeout);
-  }, [amount, lockDuration, previewReward]);
+  }, [amount, lockDuration, previewReward, minLockDays]);
 
   const handleStake = async () => {
     const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount) || parsedAmount <= 0 || lockDuration <= 0) {
-      alert("❌ Please enter a valid amount and lock duration.");
+    if (
+      isNaN(parsedAmount) ||
+      parsedAmount <= 0 ||
+      lockDuration < minLockDays ||
+      lockDuration > maxLockDays
+    ) {
+      alert(`❌ Please enter a valid amount and lock duration between ${minLockDays} and ${maxLockDays} days.`);
       return;
     }
 
@@ -108,7 +119,9 @@ const Vault = () => {
                 />
 
                 <p className="mt-2">
-                  Lock Duration: <strong>{lockDuration} days</strong>
+                  Lock Duration:{" "}
+                  <strong>{lockDuration} days</strong>{" "}
+                  <small className="text-muted">(Min {minLockDays}, Max {maxLockDays})</small>
                 </p>
 
                 <motion.div

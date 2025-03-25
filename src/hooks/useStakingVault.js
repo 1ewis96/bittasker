@@ -14,6 +14,8 @@ export const useStakingVault = () => {
   const [account, setAccount] = useState(null);
   const [stakes, setStakes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [minLockDays, setMinLockDays] = useState(0);
+  const [maxLockDays, setMaxLockDays] = useState(365);
 
   useEffect(() => {
     if (!window.ethereum) {
@@ -35,7 +37,8 @@ export const useStakingVault = () => {
         const staking = new ethers.Contract(STAKING_CONTRACT, StakingVault?.abi || [], signer);
         const token = new ethers.Contract(TOKEN_CONTRACT, ERC20, signer);
 
-        console.log("✅ Wallet connected:", address);
+        const min = await staking.MIN_LOCK_DAYS();
+        const max = await staking.MAX_LOCK_DAYS();
 
         if (!cancelled) {
           setProvider(provider);
@@ -43,7 +46,12 @@ export const useStakingVault = () => {
           setStakingContract(staking);
           setTokenContract(token);
           setAccount(address);
+          setMinLockDays(Number(min));
+          setMaxLockDays(Number(max));
         }
+
+        console.log("✅ Wallet connected:", address);
+        console.log("📅 Min/Max Lock Days:", { min: Number(min), max: Number(max) });
       } catch (error) {
         console.error("❌ Wallet or contract init failed:", error);
       }
@@ -58,7 +66,7 @@ export const useStakingVault = () => {
 
   const approveTokens = async (amount) => {
     if (!tokenContract) throw new Error("Token contract not ready");
-    const decimals = await tokenContract.decimals(); // dynamically fetch
+    const decimals = await tokenContract.decimals();
     const tx = await tokenContract.approve(
       STAKING_CONTRACT,
       ethers.parseUnits(amount.toString(), decimals)
@@ -67,7 +75,6 @@ export const useStakingVault = () => {
     await tx.wait();
     console.log("✅ Tokens approved");
   };
-  
 
   const stakeTokens = async (amount, lockDays) => {
     if (!stakingContract || !tokenContract || !signer || !account) {
@@ -79,17 +86,32 @@ export const useStakingVault = () => {
     setLoading(true);
     try {
       const parsedAmount = parseFloat(amount);
-      if (isNaN(parsedAmount) || parsedAmount <= 0 || lockDays <= 0) {
-        throw new Error("Invalid amount or lock duration");
+      if (
+        isNaN(parsedAmount) ||
+        parsedAmount <= 0 ||
+        lockDays < minLockDays ||
+        lockDays > maxLockDays
+      ) {
+        throw new Error(`Invalid lock duration. Must be between ${minLockDays} and ${maxLockDays} days.`);
       }
 
       await approveTokens(parsedAmount);
       console.log("📥 Staking tokens...");
-      const tx = await stakingContract.stake(ethers.parseUnits(parsedAmount.toString(), 18), lockDays);
+      console.log("📦 Staking with values:", {
+        amount: parsedAmount,
+        lockDays,
+        parsedAmountRaw: ethers.parseUnits(parsedAmount.toString(), 18).toString(),
+      });
+
+      const tx = await stakingContract.stake(
+        ethers.parseUnits(parsedAmount.toString(), 18),
+        lockDays
+      );
       await tx.wait();
       console.log("✅ Staking complete");
     } catch (error) {
       console.error("❌ Stake failed:", error);
+      alert(`❌ Stake failed: ${error.reason || error.message || "Unknown error"}`);
       throw error;
     } finally {
       setLoading(false);
@@ -116,7 +138,13 @@ export const useStakingVault = () => {
     if (!stakingContract) return "0.00";
 
     const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount) || parsedAmount <= 0 || lockDays <= 0) return "0.00";
+    if (
+      isNaN(parsedAmount) ||
+      parsedAmount <= 0 ||
+      lockDays < minLockDays ||
+      lockDays > maxLockDays
+    )
+      return "0.00";
 
     try {
       const reward = await stakingContract.previewReward(
@@ -139,5 +167,7 @@ export const useStakingVault = () => {
     stakes,
     previewReward,
     loading,
+    minLockDays,
+    maxLockDays,
   };
 };
