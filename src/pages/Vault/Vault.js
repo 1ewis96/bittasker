@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { useAuth } from "react-oidc-context";
-import Navigation from "./Navigation";
-import Footer from "./Footer";
+import Navigation from "../Navigation";
+import Footer from "../Footer";
 
 const Vault = () => {
   const auth = useAuth(); // Example usage of authentication if needed
