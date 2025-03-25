@@ -140,6 +140,7 @@ const Navigation = () => {
                       Email: {userData?.email}
                     </pre>
                   </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/vault">Vault</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => {

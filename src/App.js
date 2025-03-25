@@ -8,6 +8,7 @@ import Map from './pages/Map';
 import Swap from './pages/Swap';
 import WhitePaper from './pages/WhitePaper';
 import Settings from './pages/Settings/Settings';
+import Vault from './pages/Vault/Vault';
 import CognitoCallback from './hooks/auth/CognitoCallback';
 import CognitoCallbackClear from './hooks/auth/CognitoCallbackClear';
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/white-paper" element={<WhitePaper />} />
           <Route path="/map" element={<Map />} />
           <Route path="/swap" element={<Swap />} />
+          <Route path="/vault" element={<Vault />} />
           <Route path="/auth/callback" element={<CognitoCallback />} />
           <Route path="/auth/callback/clear" element={<CognitoCallbackClear />} />
         </Routes>
