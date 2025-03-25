@@ -16,23 +16,37 @@ export const useStakingVault = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (window.ethereum) {
-      const init = async () => {
+    if (!window.ethereum) return;
+  
+    let cancelled = false;
+  
+    const init = async () => {
+      try {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
-        const staking = new ethers.Contract(STAKING_CONTRACT, StakingVault.abi, signer);
-        const token = new ethers.Contract(TOKEN_CONTRACT, ERC20.abi, signer);
+        const staking = new ethers.Contract(STAKING_CONTRACT, StakingVault?.abi || [], signer);
+        const token = new ethers.Contract(TOKEN_CONTRACT, ERC20?.abi || [], signer);
         const address = await signer.getAddress();
-
-        setProvider(provider);
-        setSigner(signer);
-        setStakingContract(staking);
-        setTokenContract(token);
-        setAccount(address);
-      };
-      init();
-    }
+  
+        if (!cancelled) {
+          setProvider(provider);
+          setSigner(signer);
+          setStakingContract(staking);
+          setTokenContract(token);
+          setAccount(address);
+        }
+      } catch (error) {
+        console.error("Failed to initialize contracts:", error);
+      }
+    };
+  
+    init();
+  
+    return () => {
+      cancelled = true;
+    };
   }, []);
+  
 
   const approveTokens = async (amount) => {
     if (!tokenContract) throw new Error("Token contract not ready");
@@ -41,10 +55,11 @@ export const useStakingVault = () => {
   };
 
   const stakeTokens = async (amount, lockDays) => {
-    if (!stakingContract || !tokenContract || !signer) {
-      alert("❌ Wallet not connected or contracts not ready");
-      return;
-    }
+    if (!window.ethereum || !stakingContract || !tokenContract || !signer || !account) {
+        alert("❌ Wallet not connected or contracts not ready");
+        return;
+      }
+      
 
     setLoading(true);
     try {
