@@ -231,8 +231,7 @@ const Vault = () => {
                         } = stake;
 
                         const start = BigInt(startTime);
-                        const unlockTime =
-                          start + BigInt(lockDuration) * BigInt(86400);
+                        const unlockTime = start + BigInt(lockDuration);
                         const now = BigInt(Math.floor(Date.now() / 1000));
                         const isUnlocked = now >= unlockTime;
                         const parsedAmount = parseFloat(
