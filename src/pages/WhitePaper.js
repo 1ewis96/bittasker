@@ -50,7 +50,7 @@ const WhitePaper = () => {
               </p>
               <p>
               Task Smart Contract - 0x28D42ef7c9703265f20aaa952f0f179d669f07F3 <br></br>
-              Task Staking Contract - 
+              Task Staking Contract - 0xf9aC00a1efb05d6F62Da307c0D8E5ce6c36E0905
 
               </p>
             
