@@ -58,12 +58,16 @@ export const useStakingVault = () => {
 
   const approveTokens = async (amount) => {
     if (!tokenContract) throw new Error("Token contract not ready");
-    console.log("🔒 Approving tokens...");
-    const tx = await tokenContract.approve(STAKING_CONTRACT, ethers.parseUnits(amount.toString(), 18));
+    const decimals = await tokenContract.decimals(); // dynamically fetch
+    const tx = await tokenContract.approve(
+      STAKING_CONTRACT,
+      ethers.parseUnits(amount.toString(), decimals)
+    );
     console.log("⏳ Waiting for approve tx...");
     await tx.wait();
     console.log("✅ Tokens approved");
   };
+  
 
   const stakeTokens = async (amount, lockDays) => {
     if (!stakingContract || !tokenContract || !signer || !account) {
