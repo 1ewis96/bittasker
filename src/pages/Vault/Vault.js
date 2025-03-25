@@ -208,7 +208,7 @@ const Vault = () => {
 
           {/* Dashboard Section */}
           <Col md={6}>
-            <Card className="p-4 bg-light shadow rounded-4 mb-4">
+            <Card className="p-4 bg-light shadow rounded-4 mb-4 bg-dark">
               <Card.Body>
                 <h4 className="mb-3">📊 Active Stakes</h4>
                 {activeStakes.length === 0 ? (
