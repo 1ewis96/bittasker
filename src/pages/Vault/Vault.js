@@ -63,7 +63,6 @@ const Vault = () => {
   const lockDuration = Math.floor(
     minLockDays + (percentage / 100) * (maxLockDays - minLockDays)
   );
-  
 
   useEffect(() => {
     if (account) fetchStakes();
@@ -74,7 +73,6 @@ const Vault = () => {
     if (percentage > 100) setPercentage(100);
   }, [percentage]);
 
-  
   const fetchEstimate = async (parsedAmount) => {
     try {
       const reward = await previewReward(parsedAmount, lockDuration);
@@ -185,8 +183,8 @@ const Vault = () => {
 
                 <Form.Range
                   className="mt-4"
-                  min={minLockDays}
-                  max={maxLockDays}
+                  min={0}
+                  max={100}
                   value={percentage}
                   onChange={(e) => setPercentage(Number(e.target.value))}
                 />
@@ -246,12 +244,12 @@ const Vault = () => {
                       {activeStakes.map((stake, i) => {
                         const { amount, startTime, lockDuration, apy, withdrawn } = stake;
                         const start = BigInt(startTime);
-                        const unlockTime = start + BigInt(lockDuration) * BigInt(86400);
+                        const unlockTime = start + BigInt(lockDuration); // FIXED: no *86400
                         const now = BigInt(Math.floor(Date.now() / 1000));
                         const isUnlocked = now >= unlockTime;
 
                         const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
-                        const reward = parsedAmount * (Number(apy) / 100) * (Number(lockDuration) / 365);
+                        const reward = parsedAmount * (Number(apy) / 100) * (Number(lockDuration) / (365 * 86400));
                         const countdown = getTimeRemaining(Number(unlockTime));
 
                         return (
