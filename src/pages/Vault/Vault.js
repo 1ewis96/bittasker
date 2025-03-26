@@ -149,7 +149,6 @@ const Vault = () => {
     }
   };
 
-  // Add original index to each stake before filtering
   const stakesWithIndex = stakes.map((s, i) => ({ ...s, originalIndex: i }));
   const activeStakes = stakesWithIndex.filter((s) => !s.withdrawn);
   const withdrawnStakes = stakesWithIndex.filter((s) => s.withdrawn);
@@ -248,8 +247,21 @@ const Vault = () => {
                     <tbody>
                       {activeStakes.map((stake, i) => {
                         const { amount, startTime, lockDuration, apy, originalIndex } = stake;
-                        const start = BigInt(startTime);
-                        const unlockTime = start + BigInt(lockDuration); // Already in seconds
+
+                        if (startTime === undefined || lockDuration === undefined) {
+                          console.warn("⛔️ Skipping stake with missing data:", stake);
+                          return null;
+                        }
+
+                        let start, unlockTime;
+                        try {
+                          start = BigInt(startTime);
+                          unlockTime = start + BigInt(lockDuration);
+                        } catch (err) {
+                          console.error("❌ Failed to parse BigInt for stake:", stake, err);
+                          return null;
+                        }
+
                         const now = BigInt(Math.floor(Date.now() / 1000));
                         const isUnlocked = now >= unlockTime;
 
