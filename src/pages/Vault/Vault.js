@@ -289,7 +289,8 @@ const Vault = () => {
                         const isUnlocked = now >= unlockTime;
 
                         const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
-                        const reward = parsedAmount * (Number(apy) / 100) * (Number(lockDuration) / (365 * 86400));
+                        const safeLockDuration = Number(lockDuration);
+                        const reward = parsedAmount * (Number(apy) / 100) * (safeLockDuration / (365 * 86400));
                         const countdown = getTimeRemaining(Number(unlockTime));
 
                         return (
