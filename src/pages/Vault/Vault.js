@@ -128,13 +128,15 @@ const Vault = () => {
   };
 
   const handleUnstake = async (index) => {
+    console.log("🟡 handleUnstake called with index:", index);
     const stake = stakes[index];
     if (stake.withdrawn) return;
-
+  
     if (!window.confirm("Are you sure you want to unstake?")) return;
-
+  
     try {
       setUnstakeLoadingIndex(index);
+      console.log("🟠 calling unstake...");
       await unstake(index);
       toast.success("✅ Unstaked successfully!");
       await fetchStakes();
@@ -145,6 +147,7 @@ const Vault = () => {
       setUnstakeLoadingIndex(null);
     }
   };
+  
 
   const activeStakes = stakes.filter((s) => !s.withdrawn);
   const withdrawnStakes = stakes.filter((s) => s.withdrawn);
