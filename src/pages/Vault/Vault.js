@@ -60,12 +60,21 @@ const Vault = () => {
     loading,
   } = useStakingVault();
 
-  const lockDuration = Math.floor((percentage / 100) * maxLockDays);
+  const lockDuration = Math.floor(
+    minLockDays + (percentage / 100) * (maxLockDays - minLockDays)
+  );
+  
 
   useEffect(() => {
     if (account) fetchStakes();
   }, [account, fetchStakes]);
 
+  useEffect(() => {
+    if (percentage < 0) setPercentage(0);
+    if (percentage > 100) setPercentage(100);
+  }, [percentage]);
+
+  
   const fetchEstimate = async (parsedAmount) => {
     try {
       const reward = await previewReward(parsedAmount, lockDuration);
