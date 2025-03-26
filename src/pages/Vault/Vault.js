@@ -11,13 +11,11 @@ import {
   Spinner,
   Table,
   Badge,
-  OverlayTrigger,
-  Tooltip,
 } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { FaLock, FaInfoCircle, FaFileExport } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import Navigation from "../Navigation";
 import Footer from "../Footer";
 import { useStakingVault } from "../../hooks/useStakingVault";
@@ -153,29 +151,7 @@ const Vault = () => {
 
   const stakesWithIndex = stakes.map((s, i) => ({ ...s, originalIndex: i }));
   const activeStakes = stakesWithIndex.filter((s) => !s[4]);
-  const withdrawnStakes = stakesWithIndex.filter((s) => s[4]).sort((a, b) => b[1] - a[1]);
-
-  const handleExportCSV = () => {
-    const headers = ["Amount", "Start", "Duration", "APY", "Status"];
-    const rows = withdrawnStakes.map((stake) => {
-      const amount = ethers.formatUnits(stake[0], 18);
-      const start = formatDate(stake[1]);
-      const duration = Math.floor(Number(stake[2]) / 86400) + " days";
-      const apy = Number(stake[3]) + "%";
-      const unlockTime = Number(stake[1]) + Number(stake[2]);
-      const wasEarly = Date.now() / 1000 < unlockTime;
-      const status = wasEarly ? "Early Unstake" : "Completed";
-      return [amount, start, duration, apy, status];
-    });
-    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", "unstaked_history.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const withdrawnStakes = stakesWithIndex.filter((s) => s[4]);
 
   return (
     <>
@@ -289,8 +265,7 @@ const Vault = () => {
                         const isUnlocked = now >= unlockTime;
 
                         const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
-                        const safeLockDuration = Number(lockDuration);
-                        const reward = parsedAmount * (Number(apy) / 100) * (safeLockDuration / (365 * 86400));
+                        const reward = parsedAmount * (Number(apy) / 100) * (Number(lockDuration) / (365 * 86400));
                         const countdown = getTimeRemaining(Number(unlockTime));
 
                         return (
@@ -322,20 +297,14 @@ const Vault = () => {
                 {withdrawnStakes.length > 0 && (
                   <>
                     <hr />
-                    <div className="d-flex justify-content-between align-items-center">
-                      <h5 className="mt-4">📜 Unstaked History</h5>
-                      <Button variant="outline-light" size="sm" onClick={handleExportCSV}>
-                        <FaFileExport className="me-1" /> Export CSV
-                      </Button>
-                    </div>
-                    <Table size="sm" bordered hover responsive className="mt-3">
+                    <h5 className="mt-4">📜 Unstaked History</h5>
+                    <Table size="sm" bordered hover responsive>
                       <thead>
                         <tr>
                           <th>Amount</th>
                           <th>Start</th>
                           <th>Duration</th>
                           <th>APY</th>
-                          <th>Status <FaInfoCircle title="Shows if the stake was withdrawn early or completed normally." /></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -345,32 +314,12 @@ const Vault = () => {
                           const lockDuration = stake[2];
                           const apy = stake[3];
                           const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
-
-                          const unlockTime = Number(startTime) + Number(lockDuration);
-                          const wasEarly = Date.now() / 1000 < unlockTime;
-
                           return (
                             <tr key={i}>
                               <td>{parsedAmount.toFixed(2)} TOKEN</td>
                               <td>{formatDate(startTime)}</td>
                               <td>{Math.floor(Number(lockDuration) / 86400)} days</td>
                               <td>{Number(apy)}%</td>
-                              <td>
-                                <OverlayTrigger
-                                  placement="top"
-                                  overlay={
-                                    <Tooltip>
-                                      {wasEarly
-                                        ? "This stake was withdrawn before the full lock duration."
-                                        : "This stake completed the full lock period."}
-                                    </Tooltip>
-                                  }
-                                >
-                                  <Badge bg={wasEarly ? "danger" : "success"}>
-                                    {wasEarly ? "Early Unstake" : "Completed"}
-                                  </Badge>
-                                </OverlayTrigger>
-                              </td>
                             </tr>
                           );
                         })}
