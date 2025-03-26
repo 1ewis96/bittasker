@@ -128,23 +128,16 @@ const Vault = () => {
   };
 
   const handleUnstake = async (index) => {
-    console.log("🟡 handleUnstake called with index:", index);
-  
     const stake = stakes[index];
-    console.log("🔍 stake object:", stake);
-  
     if (stake.withdrawn) {
-      console.log("🚫 Already withdrawn. Aborting.");
+      console.log("🚫 Already withdrawn.");
       return;
     }
-  
-    const userConfirmed = window.confirm("Are you sure you want to unstake?");
-    console.log("👤 User confirmed?", userConfirmed);
-    if (!userConfirmed) return;
-  
+
+    if (!window.confirm("Are you sure you want to unstake?")) return;
+
     try {
       setUnstakeLoadingIndex(index);
-      console.log("🟠 calling unstake...");
       await unstake(index);
       toast.success("✅ Unstaked successfully!");
       await fetchStakes();
@@ -155,11 +148,11 @@ const Vault = () => {
       setUnstakeLoadingIndex(null);
     }
   };
-  
-  
 
-  const activeStakes = stakes.filter((s) => !s.withdrawn);
-  const withdrawnStakes = stakes.filter((s) => s.withdrawn);
+  // Add original index to each stake before filtering
+  const stakesWithIndex = stakes.map((s, i) => ({ ...s, originalIndex: i }));
+  const activeStakes = stakesWithIndex.filter((s) => !s.withdrawn);
+  const withdrawnStakes = stakesWithIndex.filter((s) => s.withdrawn);
 
   return (
     <>
@@ -254,9 +247,9 @@ const Vault = () => {
                     </thead>
                     <tbody>
                       {activeStakes.map((stake, i) => {
-                        const { amount, startTime, lockDuration, apy, withdrawn } = stake;
+                        const { amount, startTime, lockDuration, apy, originalIndex } = stake;
                         const start = BigInt(startTime);
-                        const unlockTime = start + BigInt(lockDuration); // FIXED: no *86400
+                        const unlockTime = start + BigInt(lockDuration); // Already in seconds
                         const now = BigInt(Math.floor(Date.now() / 1000));
                         const isUnlocked = now >= unlockTime;
 
@@ -265,7 +258,7 @@ const Vault = () => {
                         const countdown = getTimeRemaining(Number(unlockTime));
 
                         return (
-                          <tr key={i}>
+                          <tr key={originalIndex}>
                             <td>{parsedAmount.toFixed(2)} TOKEN</td>
                             <td>{countdown}</td>
                             <td>{Number(apy)}%</td>
@@ -274,10 +267,10 @@ const Vault = () => {
                               <Button
                                 size="sm"
                                 variant={isUnlocked ? "success" : "danger"}
-                                onClick={() => handleUnstake(i)}
-                                disabled={unstakeLoadingIndex === i}
+                                onClick={() => handleUnstake(originalIndex)}
+                                disabled={unstakeLoadingIndex === originalIndex}
                               >
-                                {unstakeLoadingIndex === i ? (
+                                {unstakeLoadingIndex === originalIndex ? (
                                   <Spinner animation="border" size="sm" className="me-2" />
                                 ) : null}
                                 {isUnlocked ? "Unstake" : "Early Unstake"}
