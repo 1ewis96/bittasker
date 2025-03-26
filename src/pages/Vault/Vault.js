@@ -129,7 +129,7 @@ const Vault = () => {
 
   const handleUnstake = async (index) => {
     const stake = stakes[index];
-    if (stake.withdrawn) {
+    if (stake[4]) {
       console.log("🚫 Already withdrawn.");
       return;
     }
@@ -150,8 +150,8 @@ const Vault = () => {
   };
 
   const stakesWithIndex = stakes.map((s, i) => ({ ...s, originalIndex: i }));
-  const activeStakes = stakesWithIndex.filter((s) => !s.withdrawn);
-  const withdrawnStakes = stakesWithIndex.filter((s) => s.withdrawn);
+  const activeStakes = stakesWithIndex.filter((s) => !s[4]);
+  const withdrawnStakes = stakesWithIndex.filter((s) => s[4]);
 
   return (
     <>
@@ -246,12 +246,11 @@ const Vault = () => {
                     </thead>
                     <tbody>
                       {activeStakes.map((stake, i) => {
-                        const { amount, startTime, lockDuration, apy, originalIndex } = stake;
-
-                        if (startTime === undefined || lockDuration === undefined) {
-                          console.warn("⛔️ Skipping stake with missing data:", stake);
-                          return null;
-                        }
+                        const amount = stake[0];
+                        const startTime = stake[1];
+                        const lockDuration = stake[2];
+                        const apy = stake[3];
+                        const originalIndex = stake.originalIndex;
 
                         let start, unlockTime;
                         try {
@@ -310,7 +309,10 @@ const Vault = () => {
                       </thead>
                       <tbody>
                         {withdrawnStakes.map((stake, i) => {
-                          const { amount, startTime, lockDuration, apy } = stake;
+                          const amount = stake[0];
+                          const startTime = stake[1];
+                          const lockDuration = stake[2];
+                          const apy = stake[3];
                           const parsedAmount = parseFloat(ethers.formatUnits(amount, 18));
                           return (
                             <tr key={i}>
