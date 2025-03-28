@@ -14,7 +14,6 @@ const auth = useAuth();
 
 const [status, setStatus] = useState('Checking...');
 
-const [status, setStatus] = useState('Checking...');
 
 useEffect(() => {
   const checkConnection = async () => {
@@ -39,12 +38,13 @@ useEffect(() => {
   checkConnection();
 }, []);
 
-return <div>{status}</div>;
+
 
   // Authenticated state.
   if (auth.isAuthenticated) {
     return (
 	    <>
+      <div>{status}</div>
       <Navigation /> {/* Use the component here */}
 	  
 	 <div>
@@ -63,6 +63,7 @@ return <div>{status}</div>;
   // Uunauthenticated state.
   return (
     <>
+    <div>{status}</div>
       <Navigation /> {/* Use the component here */}
 	  
 	 <div>
