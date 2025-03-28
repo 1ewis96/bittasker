@@ -44,7 +44,9 @@ useEffect(() => {
   if (auth.isAuthenticated) {
     return (
 	    <>
-      <div>{status}</div>
+      <div className="alert alert-dark text-center mt-3" role="alert">
+      {status}</div>
+      
       <Navigation /> {/* Use the component here */}
 	  
 	 <div>
@@ -63,9 +65,13 @@ useEffect(() => {
   // Uunauthenticated state.
   return (
     <>
-    <div>{status}</div>
+     
       <Navigation /> {/* Use the component here */}
 	  
+
+      <Container className="mt-4">
+      <div className="alert alert-dark text-center mt-3" role="alert">{status}</div>
+      </Container>
 	 <div>
       <HeroSection /> {/* Use the component here */}
     </div>
