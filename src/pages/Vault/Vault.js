@@ -21,6 +21,7 @@ import Footer from "../Footer";
 import { useStakingVault } from "../../hooks/useStakingVault";
 import { ethers } from "ethers";
 import MetaMaskBanner from "../../modules/MetaMaskBanner"; // Adjust the path as needed
+import AuthBanner from "../../modules/AuthBanner.js"; // Adjust the path as needed
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -159,6 +160,7 @@ const Vault = () => {
     <>
       <Navigation />
       <MetaMaskBanner />
+      <AuthBanner />
       <Container className="mt-5">
         <Row>
           <Col md={6}>
