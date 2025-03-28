@@ -14,6 +14,8 @@ const auth = useAuth();
 
 const [status, setStatus] = useState('Checking...');
 
+const [status, setStatus] = useState('Checking...');
+
 useEffect(() => {
   const checkConnection = async () => {
     if (!window.ethereum) {
@@ -22,14 +24,15 @@ useEffect(() => {
     }
 
     try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       if (accounts.length > 0) {
         setStatus(`Connected: ${accounts[0]}`);
       } else {
         setStatus('Not connected');
       }
     } catch (error) {
-      setStatus('Not connected');
+      console.error(error);
+      setStatus('Error checking connection');
     }
   };
 
