@@ -9,6 +9,7 @@ import Swap from './pages/Swap';
 import WhitePaper from './pages/WhitePaper';
 import Settings from './pages/Settings/Settings';
 import Vault from './pages/Vault/Vault';
+import Purchase from './pages/Purchase/Purchase';
 import CognitoCallback from './hooks/auth/CognitoCallback';
 import CognitoCallbackClear from './hooks/auth/CognitoCallbackClear';
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/map" element={<Map />} />
           <Route path="/swap" element={<Swap />} />
           <Route path="/vault" element={<Vault />} />
+          <Route path="/purchase" element={<Purchase />} />
           <Route path="/auth/callback" element={<CognitoCallback />} />
           <Route path="/auth/callback/clear" element={<CognitoCallbackClear />} />
         </Routes>
