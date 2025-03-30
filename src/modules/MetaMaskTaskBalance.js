@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Badge } from "react-bootstrap";
 import { BrowserProvider, Contract } from "ethers";  // Use BrowserProvider instead of Web3Provider
 import { formatUnits } from "ethers";  // Import formatUnits to format the token balance
 
