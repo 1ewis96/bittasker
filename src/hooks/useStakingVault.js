@@ -3,8 +3,8 @@ import { ethers } from "ethers";
 import StakingVault from "../abis/StakingVault.json";
 import ERC20 from "../abis/ERC20.json";
 
-const STAKING_CONTRACT = "0xf9aC00a1efb05d6F62Da307c0D8E5ce6c36E0905";
-const TOKEN_CONTRACT = "0x28D42ef7c9703265f20aaa952f0f179d669f07F3";
+const STAKING_CONTRACT = "0xf3F0D8b7dFA1EEa44692db8710B61842F7a6120D";
+const TOKEN_CONTRACT = "0x50b77f12B3a133daCBE0cdd5EdD9a6Eb35Fd8350";
 
 export const useStakingVault = () => {
   const [provider, setProvider] = useState(null);
