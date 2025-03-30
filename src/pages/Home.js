@@ -49,9 +49,9 @@ useEffect(() => {
       <Container className="mt-4">
       <div className="alert alert-dark text-center mt-3" role="alert">{status}</div>
       </Container>
-	 <div>
+      <Container className="mt-4">
       <HeroSection /> {/* Use the component here */}
-    </div>
+      </Container>
 
 <Container className="mt-4">
       <Footer /> {/* Use the component here */}
