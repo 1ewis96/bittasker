@@ -161,20 +161,7 @@ const WalletBadge = () => {
   };
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "10px",
-        right: "10px",
-        padding: "5px 10px",
-        backgroundColor: "#333",
-        color: "#fff",
-        borderRadius: "20px",
-        display: "flex",
-        alignItems: "center",
-        fontSize: "14px",
-      }}
-    >
+    <>
       {isConnected && (
         <span
           style={{
@@ -190,7 +177,7 @@ const WalletBadge = () => {
         </span>
       )}
       {renderButtonContent()}
-    </div>
+    </>
   );
 };
 
