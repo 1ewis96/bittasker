@@ -172,8 +172,7 @@ const WalletBadge = () => {
             maxWidth: "200px",
           }}
         >
-          {walletAddress && `Wallet: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`}
-          {balance && ` | Balance: ${balance} TASK`}
+        {balance && ` ${balance} TASK`}
         </span>
       )}
       {renderButtonContent()}
