@@ -172,7 +172,42 @@ const WalletBadge = () => {
             maxWidth: "200px",
           }}
         >
+                              <Badge
+ 
+ bg=""
+
+ style={{
+
+   backgroundColor: 'rgba(255, 193, 7, 0.25)',
+
+   color: '#fff',
+
+   border: '1px solid #d39e00',
+
+   borderRadius: '4px',
+
+   padding: '3px 8px',
+
+   fontWeight: 700,
+
+   fontSize: '0.75rem',
+
+   marginRight: '8px',
+
+   userSelect: 'none',
+
+   display: 'flex',
+
+   alignItems: 'center',
+
+   gap: '6px',
+
+ }}
+
+>
         {balance && ` ${balance} TASK`}
+
+        </Badge>
         </span>
       )}
       {renderButtonContent()}
