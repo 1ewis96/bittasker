@@ -108,14 +108,14 @@ const MetaMaskBanner = () => {
   };
 
   return (
-    <Container className="mt-4">
+
       <div className="alert alert-dark mt-3" role="alert">
         <div className="d-flex justify-content-between align-items-center">
           <span className="text-start">{status}</span>
           {renderButton()}
         </div>
       </div>
-    </Container>
+
   );
 };
 
