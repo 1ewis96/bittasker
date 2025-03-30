@@ -1,55 +1,99 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Navbar, Nav, Dropdown, Badge, Button, Spinner } from "react-bootstrap";
-import { FaSignInAlt, FaUserPlus, FaLock, FaSyncAlt } from "react-icons/fa";
+import {
+  Container,
+  Navbar,
+  Nav,
+  Dropdown,
+  Badge,
+  Button,
+  Spinner,
+} from "react-bootstrap";
+import {
+  FaSignInAlt,
+  FaUserPlus,
+  FaLock,
+  FaSyncAlt,
+} from "react-icons/fa";
+import { ethers } from "ethers";
 import useAuthCheck from "../hooks/auth/TokenValidation";
 import { useUser } from "../context/UserContext";
+import ERC20ABI from "../abis/ERC20.json"; // <--- Make sure this path is correct
+
+const tokenAddress = "0x50b77f12B3a133daCBE0cdd5EdD9a6Eb35Fd8350";
 
 const Navigation = () => {
   const { isAuthenticated } = useAuthCheck();
   const { userData } = useUser();
 
   const [balance, setBalance] = useState({ amount: "0.00", symbol: "TASK" });
+  const [walletConnected, setWalletConnected] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [metamaskInstalled, setMetamaskInstalled] = useState(true);
+  const [walletAddress, setWalletAddress] = useState("");
 
   const fetchBalance = async () => {
-    const token = localStorage.getItem("access_token");
-    if (!token) return;
-
     try {
       setLoading(true);
-      const res = await fetch("https://api.bittasker.xyz/tx/balance", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (!window.ethereum) {
+        setMetamaskInstalled(false);
+        return;
+      }
 
-      if (!res.ok) throw new Error("Failed to fetch balance");
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
 
-      const data = await res.json();
+      const tokenContract = new ethers.Contract(tokenAddress, ERC20ABI, provider);
+      const decimals = await tokenContract.decimals();
+      const rawBalance = await tokenContract.balanceOf(address);
+      const symbol = await tokenContract.symbol();
+
+      const formatted = ethers.formatUnits(rawBalance, decimals);
+
       setBalance({
-        amount: parseFloat(data?.balance || 0).toFixed(2),
-        symbol: data?.symbol || "TASK",
+        amount: parseFloat(formatted).toFixed(2),
+        symbol: symbol || "TOKEN",
       });
+
+      setWalletAddress(address);
+      setWalletConnected(true);
     } catch (err) {
-      console.error("Balance fetch error:", err);
-      setBalance({ amount: "0.00", symbol: "TASK" });
+      console.error("Error fetching token balance:", err);
+      setWalletConnected(false);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Only run once on hard refresh
-      fetchBalance();
-  
-      // Optional: expose to window for external script calls
-      window.fetchUserBalance = fetchBalance;
+  const connectWallet = async () => {
+    if (!window.ethereum) {
+      setMetamaskInstalled(false);
+      return;
     }
-  }, []); // empty deps = only once
-  
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      if (accounts.length > 0) {
+        setWalletAddress(accounts[0]);
+        setWalletConnected(true);
+        fetchBalance();
+      }
+    } catch (err) {
+      console.error("Wallet connection error:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (window.ethereum) {
+      setMetamaskInstalled(true);
+      window.ethereum.on("accountsChanged", () => fetchBalance());
+    } else {
+      setMetamaskInstalled(false);
+    }
+  }, []);
 
   const s3Bucket = process.env.REACT_APP_S3_URL;
   const cognitoURL = process.env.REACT_APP_COGNITO_URL;
@@ -84,7 +128,11 @@ const Navigation = () => {
                   className="d-flex align-items-center"
                 >
                   <img
-                    src={userData?.avatar?.path ? `${s3Bucket}/avatars/${userData.avatar.path}` : `${s3Bucket}/avatars/default.jpg`}
+                    src={
+                      userData?.avatar?.path
+                        ? `${s3Bucket}/avatars/${userData.avatar.path}`
+                        : `${s3Bucket}/avatars/default.jpg`
+                    }
                     alt="Profile"
                     width="40"
                     height="40"
@@ -98,21 +146,34 @@ const Navigation = () => {
                   <Badge
                     bg=""
                     style={{
-                      backgroundColor: 'rgba(255, 193, 7, 0.25)',
-                      color: '#fff',
-                      border: '1px solid #d39e00',
-                      borderRadius: '4px',
-                      padding: '3px 8px',
+                      backgroundColor: "rgba(255, 193, 7, 0.25)",
+                      color: "#fff",
+                      border: "1px solid #d39e00",
+                      borderRadius: "4px",
+                      padding: "3px 8px",
                       fontWeight: 700,
-                      fontSize: '0.75rem',
-                      marginRight: '8px',
-                      userSelect: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
+                      fontSize: "0.75rem",
+                      marginRight: "8px",
+                      userSelect: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
-                    {loading ? (
+                    {!metamaskInstalled ? (
+                      <Button
+                        size="sm"
+                        onClick={() =>
+                          window.open("https://metamask.io/", "_blank")
+                        }
+                      >
+                        Install Metamask
+                      </Button>
+                    ) : !walletConnected ? (
+                      <Button size="sm" onClick={connectWallet}>
+                        Connect Wallet
+                      </Button>
+                    ) : loading ? (
                       <Spinner animation="border" size="sm" />
                     ) : (
                       <>
@@ -131,17 +192,33 @@ const Navigation = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
-                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <pre
+                      style={{
+                        width: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
                       Hello: {userData?.username}
                     </pre>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
-                    <pre style={{ width: "200px", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <pre
+                      style={{
+                        width: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
                       Email: {userData?.email}
                     </pre>
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/vault">Vault</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/vault">
+                    Vault
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/settings">
+                    Settings
+                  </Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => {
                       const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
@@ -200,11 +277,7 @@ const Navigation = () => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    
-    
   );
-  
 };
 
 export default Navigation;
-
