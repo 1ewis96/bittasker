@@ -70,12 +70,6 @@ const WalletBadge = () => {
     }
   };
 
-  // Disconnect the wallet
-  const disconnectWallet = () => {
-    setWalletAddress(null);
-    setIsConnected(false);
-    setBalance(null);
-  };
 
   // Setup listeners for account changes
   useEffect(() => {
@@ -143,21 +137,7 @@ const WalletBadge = () => {
       );
     }
 
-    return (
-      <Button
-        variant="dark"
-        style={{
-          backgroundColor: "#000",
-          padding: "5px 10px",
-          fontSize: "12px",
-          display: "flex",
-          alignItems: "center",
-        }}
-        onClick={disconnectWallet}
-      >
-        Disconnect
-      </Button>
-    );
+   
   };
 
   return (
