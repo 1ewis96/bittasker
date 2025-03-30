@@ -53,7 +53,7 @@ const Navigation = () => {
 
       setBalance({
         amount: parseFloat(formatted).toFixed(2),
-        symbol: symbol || "TOKEN",
+        symbol: symbol || "TASK",
       });
 
       setWalletAddress(address);
