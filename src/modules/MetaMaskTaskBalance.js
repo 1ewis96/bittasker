@@ -1,5 +1,3 @@
-// src/components/WalletBadge.js
-
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { BrowserProvider, Contract } from "ethers";  // Use BrowserProvider instead of Web3Provider
@@ -46,7 +44,6 @@ const WalletBadge = () => {
 
   // Fetch the TASK token balance for the connected wallet address
   const fetchBalance = async (address) => {
-    // Use BrowserProvider instead of Web3Provider to interact with MetaMask
     const provider = new BrowserProvider(window.ethereum);  // Using BrowserProvider to connect to the network
     const tokenContract = new Contract(TASK_TOKEN_ADDRESS, ERC20_ABI, provider);  // Contract instance
     const tokenBalance = await tokenContract.balanceOf(address);
@@ -95,8 +92,8 @@ const WalletBadge = () => {
     }
   }, []);
 
-  // Render the badge content
-  const renderBadgeContent = () => {
+  // Render the MetaMask button and wallet info text
+  const renderButtonContent = () => {
     if (!hasMetaMask) {
       return (
         <Button
@@ -192,7 +189,7 @@ const WalletBadge = () => {
           {balance && ` | Balance: ${balance} TASK`}
         </span>
       )}
-      {renderBadgeContent()}
+      {renderButtonContent()}
     </div>
   );
 };
