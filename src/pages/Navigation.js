@@ -128,7 +128,8 @@ const Navigation = () => {
   id="profile-dropdown"
   className="d-flex align-items-center position-relative"
   style={{
-    padding: "5px 10px", // Adjust the padding to ensure enough space inside the button
+    padding: "5px 15px", // Add padding to provide space inside the button
+    minWidth: "150px", // Ensure the button is wide enough to fit both elements
   }}
 >
   <img
@@ -147,18 +148,18 @@ const Navigation = () => {
       border: "3px solid #fff",
     }}
   />
-  {/* Add the WalletBadge to be positioned within the button */}
   <div
     style={{
       position: "absolute",
-      top: "0",
-      right: "0",
-      transform: "translate(50%, -50%)",  // Positions the badge to the top-right corner
+      top: "5px",  // Adjust top position to be inside the button
+      right: "5px",  // Adjust right position to sit neatly in the button
+      zIndex: 10,
     }}
   >
     <WalletBadge />
   </div>
 </Dropdown.Toggle>
+
 
 
                 <Dropdown.Menu>
