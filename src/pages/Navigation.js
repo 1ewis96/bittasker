@@ -123,29 +123,42 @@ const Navigation = () => {
           {isAuthenticated ? (
             <Nav>
               <Dropdown align="end">
-                <Dropdown.Toggle
-                  variant="dark"
-                  id="profile-dropdown"
-                  className="d-flex align-items-center"
-                >
-                  <img
-                    src={
-                      userData?.avatar?.path
-                        ? `${s3Bucket}/avatars/${userData.avatar.path}`
-                        : `${s3Bucket}/avatars/default.jpg`
-                    }
-                    alt="Profile"
-                    width="40"
-                    height="40"
-                    style={{
-                      borderRadius: "50%",
-                      marginRight: "10px",
-                      objectFit: "cover",
-                      border: "3px solid #fff",
-                    }}
-                  />
-                      <WalletBadge />
-                </Dropdown.Toggle>
+              <Dropdown.Toggle
+  variant="dark"
+  id="profile-dropdown"
+  className="d-flex align-items-center"
+  style={{
+    position: "relative", // Allows positioning of badge inside the button
+  }}
+>
+  <img
+    src={
+      userData?.avatar?.path
+        ? `${s3Bucket}/avatars/${userData.avatar.path}`
+        : `${s3Bucket}/avatars/default.jpg`
+    }
+    alt="Profile"
+    width="40"
+    height="40"
+    style={{
+      borderRadius: "50%",
+      marginRight: "10px",
+      objectFit: "cover",
+      border: "3px solid #fff",
+    }}
+  />
+  <div
+    style={{
+      position: "absolute",
+      top: "-5px",  // Adjust as needed for better positioning
+      right: "-5px",  // Adjust as needed for better positioning
+      zIndex: 10,  // Ensure the badge is on top of the avatar
+    }}
+  >
+    <WalletBadge />
+  </div>
+</Dropdown.Toggle>
+
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
                     <pre
