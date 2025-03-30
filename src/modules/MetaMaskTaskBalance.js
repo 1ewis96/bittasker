@@ -172,7 +172,7 @@ const WalletBadge = () => {
 
    fontSize: '0.75rem',
 
-   marginRight: '8px',
+   marginRight: '4px',
 
    userSelect: 'none',
 
