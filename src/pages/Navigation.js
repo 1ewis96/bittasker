@@ -126,9 +126,9 @@ const Navigation = () => {
               <Dropdown.Toggle
   variant="dark"
   id="profile-dropdown"
-  className="d-flex align-items-center"
+  className="d-flex align-items-center position-relative"
   style={{
-    position: "relative", // Allows positioning of badge inside the button
+    padding: "5px 10px", // Adjust the padding to ensure enough space inside the button
   }}
 >
   <img
@@ -147,17 +147,19 @@ const Navigation = () => {
       border: "3px solid #fff",
     }}
   />
+  {/* Add the WalletBadge to be positioned within the button */}
   <div
     style={{
       position: "absolute",
-      top: "-5px",  // Adjust as needed for better positioning
-      right: "-5px",  // Adjust as needed for better positioning
-      zIndex: 10,  // Ensure the badge is on top of the avatar
+      top: "0",
+      right: "0",
+      transform: "translate(50%, -50%)",  // Positions the badge to the top-right corner
     }}
   >
     <WalletBadge />
   </div>
 </Dropdown.Toggle>
+
 
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
