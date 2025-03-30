@@ -2,10 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { JsonRpcProvider } from "ethers";  // Import JsonRpcProvider for interacting with the Ethereum network
-import { formatEther } from "ethers";  // Import the formatEther function
+import { JsonRpcProvider, Contract } from "ethers";  // Import Contract from ethers
+import { formatUnits } from "ethers";  // Import formatUnits to format the token balance
 
 const s3Bucket = "https://s3.bittasker.xyz"; // Replace with your actual bucket URL
+
+const TASK_TOKEN_ADDRESS = "0x50b77f12B3a133daCBE0cdd5EdD9a6Eb35Fd8350";  // TASK token contract address
+const ERC20_ABI = [
+  // Minimal ABI to get balanceOf
+  "function balanceOf(address owner) view returns (uint256)"
+];
 
 const WalletBadge = () => {
   const [walletAddress, setWalletAddress] = useState(null);
@@ -38,12 +44,13 @@ const WalletBadge = () => {
     }
   };
 
-  // Fetch balance for the connected wallet address
+  // Fetch the TASK token balance for the connected wallet address
   const fetchBalance = async (address) => {
     const provider = new JsonRpcProvider(window.ethereum);  // Using JsonRpcProvider to connect to the network
-    const balanceInWei = await provider.getBalance(address);
-    const balanceInEth = formatEther(balanceInWei);  // Use formatEther from ethers
-    setBalance(balanceInEth);
+    const tokenContract = new Contract(TASK_TOKEN_ADDRESS, ERC20_ABI, provider);  // Contract instance
+    const tokenBalance = await tokenContract.balanceOf(address);
+    const formattedBalance = formatUnits(tokenBalance, 18);  // Format the balance to 18 decimal places
+    setBalance(formattedBalance);
   };
 
   // Connect the wallet
@@ -181,7 +188,7 @@ const WalletBadge = () => {
           }}
         >
           {walletAddress && `Wallet: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`}
-          {balance && ` | Balance: ${balance} ETH`}
+          {balance && ` | Balance: ${balance} TASK`}
         </span>
       )}
       {renderBadgeContent()}
