@@ -19,6 +19,7 @@ import { ethers } from "ethers";
 import useAuthCheck from "../hooks/auth/TokenValidation";
 import { useUser } from "../context/UserContext";
 import ERC20ABI from "../abis/ERC20.json"; // <--- Make sure this path is correct
+import WalletBadge from "../modules/MetaMaskTaskBalance";
 
 const tokenAddress = "0x50b77f12B3a133daCBE0cdd5EdD9a6Eb35Fd8350";
 
@@ -143,52 +144,7 @@ const Navigation = () => {
                       border: "3px solid #fff",
                     }}
                   />
-                  <Badge
-                    bg=""
-                    style={{
-                      backgroundColor: "rgba(255, 193, 7, 0.25)",
-                      color: "#fff",
-                      border: "1px solid #d39e00",
-                      borderRadius: "4px",
-                      padding: "3px 8px",
-                      fontWeight: 700,
-                      fontSize: "0.75rem",
-                      marginRight: "8px",
-                      userSelect: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                    }}
-                  >
-                    {!metamaskInstalled ? (
-                      <Button
-                        size="sm"
-                        onClick={() =>
-                          window.open("https://metamask.io/", "_blank")
-                        }
-                      >
-                        Install Metamask
-                      </Button>
-                    ) : !walletConnected ? (
-                      <Button size="sm" onClick={connectWallet}>
-                        Connect Wallet
-                      </Button>
-                    ) : loading ? (
-                      <Spinner animation="border" size="sm" />
-                    ) : (
-                      <>
-                        {balance.amount} {balance.symbol}
-                        <FaSyncAlt
-                          onClick={(e) => {
-                            e.stopPropagation(); // prevent dropdown toggle
-                            fetchBalance();
-                          }}
-                          style={{ cursor: "pointer" }}
-                          title="Refresh Balance"
-                        />
-                      </>
-                    )}
-                  </Badge>
+                      <WalletBadge />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
