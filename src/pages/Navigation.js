@@ -17,6 +17,8 @@ import {
   FaLock,
   FaSyncAlt,
   FaWallet,
+  FaBoxOpen,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import { ethers } from "ethers";
 import useAuthCheck from "../hooks/auth/TokenValidation";
@@ -182,8 +184,8 @@ const Navigation = () => {
                       Email: {userData?.email}
                     </code>
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/vault">
-                    Vault
+                  <Dropdown.Item as={Link} to="/security">
+                    Security
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/settings">
                     Settings
@@ -220,15 +222,21 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/purchase">
                     Purchase
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/inventory">
-                    Inventory
+                  <Dropdown.Item as={Link} to="/swap">
+                    Swap
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/purchase">
+                    Airdrop
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/marketplace">
                     Marketplace
                   </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/vault">
+                    Vault
+                  </Dropdown.Item>
                   <Dropdown.Divider />
 
-                  <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
                 </Col>
@@ -246,21 +254,21 @@ const Navigation = () => {
                   position: "relative", // Allows positioning context for badge inside the button
                 }}
               >
-                <FaWallet className="ms-2" />
+                <FaBoxOpen className="ms-2" />
               </Dropdown.Toggle>
                <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/purchase">
-                    Purchase
-                  </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/inventory">
                     Inventory
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/marketplace">
-                    Marketplace
+                  <Dropdown.Item as={Link} to="/inventory">
+                    Trade
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/inventory">
+                    Sell
                   </Dropdown.Item>
                   <Dropdown.Divider />
 
-                  <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
                 </Col>   
@@ -278,7 +286,7 @@ const Navigation = () => {
                   position: "relative", // Allows positioning context for badge inside the button
                 }}
               >
-                <FaWallet className="ms-2" />
+                <FaSignOutAlt className="ms-2" />
               </Dropdown.Toggle>
                <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/purchase">
