@@ -199,6 +199,82 @@ const Navigation = () => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              <Dropdown.Toggle
+  variant="dark"
+  id="profile-dropdown"
+  className="d-flex align-items-center"
+  style={{
+    padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
+    minWidth: "150px",   // Ensure the button is wide enough to hold the avatar and badge
+    position: "relative", // Allows positioning context for badge inside the button
+  }}
+>
+  {/* Avatar Image */}
+  <img
+    src={
+      userData?.avatar?.path
+        ? `${s3Bucket}/avatars/${userData.avatar.path}`
+        : `${s3Bucket}/avatars/default.jpg`
+    }
+    alt="Profile"
+    width="40"
+    height="40"
+    style={{
+      borderRadius: "50%",
+      marginRight: "10px",  // Space between avatar and badge
+      objectFit: "cover",
+      border: "3px solid #fff",
+    }}
+  />
+  
+  {/* Wallet Badge inside the dropdown button */}
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <WalletBadge />
+  </div>
+</Dropdown.Toggle>
+
+
+
+
+                <Dropdown.Menu>
+                  <Dropdown.Item disabled>
+                    <pre
+                      style={{
+                        width: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      Hello: {userData?.username}
+                    </pre>
+                  </Dropdown.Item>
+                  <Dropdown.Item disabled>
+                    <pre
+                      style={{
+                        width: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      Email: {userData?.email}
+                    </pre>
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/vault">
+                    Vault
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/settings">
+                    Settings
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
+                      window.location.href = logoutUrl;
+                    }}
+                  >
+                    Sign Out
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </Nav>
           ) : (
             <Nav>
