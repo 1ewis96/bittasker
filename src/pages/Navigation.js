@@ -194,6 +194,9 @@ const Navigation = () => {
                   >
                     Sign Out
                   </Dropdown.Item>
+                  <Dropdown.Divider />
+
+                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown>
@@ -219,6 +222,9 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/marketplace">
                     Marketplace
                   </Dropdown.Item>
+                  <Dropdown.Divider />
+
+                  <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
