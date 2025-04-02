@@ -232,6 +232,8 @@ const Navigation = () => {
                 </Dropdown.Menu>
               </Dropdown>
                 </Col>
+                </Row>
+                <Row className="align-items-start">
                 <Col xs={12} md="auto" className="mb-2">
                 <Dropdown>
               <Dropdown.Toggle
@@ -261,7 +263,9 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-                </Col>            
+                </Col>   
+                </Row>   
+                <Row className="align-items-start">      
                 <Col xs={12} md="auto" className="mb-2">
                 <Dropdown>
               <Dropdown.Toggle
