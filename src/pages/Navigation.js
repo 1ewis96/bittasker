@@ -199,23 +199,20 @@ const Navigation = () => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              <Dropdown>
               <Dropdown.Toggle
-  variant="dark"
-  id="profile-dropdown"
-  className="d-flex align-items-center"
-  style={{
-    padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
-    minWidth: "150px",   // Ensure the button is wide enough to hold the avatar and badge
-    position: "relative", // Allows positioning context for badge inside the button
-  }}
->
-<i className="bi bi-wallet2"></i>
-</Dropdown.Toggle>
-
-
-
-
-                <Dropdown.Menu>
+                variant="dark"
+                id="profile-dropdown"
+                className="d-flex align-items-center"
+                style={{
+                  padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
+                  minWidth: "150px",   // Ensure the button is wide enough to hold the avatar and badge
+                  position: "relative", // Allows positioning context for badge inside the button
+                }}
+              >
+              <i className="bi bi-wallet2"></i>
+              </Dropdown.Toggle>
+               <Dropdown.Menu>
                   <Dropdown.Item disabled>
                     <pre
                       style={{
