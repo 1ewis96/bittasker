@@ -109,6 +109,7 @@ const Navigation = () => {
   const forgotPasswordReturnURL = process.env.REACT_APP_FORGOT_PASSWORD_RETURN_URL;
 
   return (
+    
     <Navbar bg="dark" variant="dark" expand={true}>
       <Container>
         <Navbar.Brand as={Link} to="/">
@@ -225,14 +226,11 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/swap">
                     Swap
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/purchase">
-                    Airdrop
-                  </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/marketplace">
                     Marketplace
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/vault">
-                    Vault
+                    Stake
                   </Dropdown.Item>
                   <Dropdown.Divider />
 
@@ -268,41 +266,16 @@ const Navigation = () => {
                   </Dropdown.Item>
                   <Dropdown.Divider />
 
-                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/logout">Clothing</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
                 </Col>   
                 </Row>   
                 <Row className="align-items-start">      
                 <Col xs={12} md="auto" className="mb-2">
-                <Dropdown>
-              <Dropdown.Toggle
-                variant="dark"
-                id="profile-dropdown"
-                className="d-flex align-items-center"
-                style={{
-                  padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
-                  minWidth: "50px",   // Ensure the button is wide enough to hold the avatar and badge
-                  position: "relative", // Allows positioning context for badge inside the button
-                }}
-              >
-                <FaSignOutAlt className="ms-2" />
-              </Dropdown.Toggle>
-               <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/purchase">
-                    Purchase
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/inventory">
-                    Inventory
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/marketplace">
-                    Marketplace
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-
-                  <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                   <FaSignOutAlt className="ms-2" as={Link} to="/logout"/>
+        
+             
                 </Col>
                 </Row>
             
