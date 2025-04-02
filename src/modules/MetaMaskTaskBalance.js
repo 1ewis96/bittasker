@@ -146,9 +146,7 @@ const WalletBadge = () => {
         <span
           style={{
             marginRight: "10px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
+         
             maxWidth: "200px",
           }}
         >

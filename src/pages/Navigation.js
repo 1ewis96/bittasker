@@ -161,7 +161,7 @@ const Navigation = () => {
 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
-                    <pre
+                    <code
                       style={{
                         width: "200px",
                         overflow: "hidden",
@@ -169,7 +169,7 @@ const Navigation = () => {
                       }}
                     >
                       Hello: {userData?.username}
-                    </pre>
+                    </code>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
                     <pre
