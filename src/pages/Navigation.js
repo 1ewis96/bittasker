@@ -8,6 +8,8 @@ import {
   Badge,
   Button,
   Spinner,
+  Row,
+  Col,
 } from "react-bootstrap";
 import {
   FaSignInAlt,
