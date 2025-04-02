@@ -199,6 +199,7 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              <Nav>
               <Dropdown>
               <Dropdown.Toggle
                 variant="dark"
@@ -257,6 +258,35 @@ const Navigation = () => {
                 </Dropdown.Menu>
               </Dropdown>
               
+              <Dropdown>
+              <Dropdown.Toggle
+                variant="dark"
+                id="profile-dropdown"
+                className="d-flex align-items-center"
+                style={{
+                  padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
+                  minWidth: "50px",   // Ensure the button is wide enough to hold the avatar and badge
+                  position: "relative", // Allows positioning context for badge inside the button
+                }}
+              >
+                <FaWallet className="ms-2" />
+              </Dropdown.Toggle>
+               <Dropdown.Menu>
+                  <Dropdown.Item as={Link} to="/purchase">
+                    Purchase
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/inventory">
+                    Inventory
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/marketplace">
+                    Marketplace
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+
+                  <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              </Nav>
             </Nav>
           ) : (
             <Nav>
