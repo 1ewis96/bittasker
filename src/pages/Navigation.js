@@ -210,41 +210,14 @@ const Navigation = () => {
                 <wallet2 className="ms-2" />
               </Dropdown.Toggle>
                <Dropdown.Menu>
-                  <Dropdown.Item disabled>
-                    <pre
-                      style={{
-                        width: "200px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      Hello: {userData?.username}
-                    </pre>
+                  <Dropdown.Item as={Link} to="/purchase">
+                    Purchase
                   </Dropdown.Item>
-                  <Dropdown.Item disabled>
-                    <pre
-                      style={{
-                        width: "200px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      Email: {userData?.email}
-                    </pre>
+                  <Dropdown.Item as={Link} to="/inventory">
+                    Inventory
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/vault">
-                    Vault
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/settings">
-                    Settings
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
-                      window.location.href = logoutUrl;
-                    }}
-                  >
-                    Sign Out
+                  <Dropdown.Item as={Link} to="/marketplace">
+                    Marketplace
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
