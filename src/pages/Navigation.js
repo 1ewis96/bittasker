@@ -172,7 +172,7 @@ const Navigation = () => {
                     </code>
                   </Dropdown.Item>
                   <Dropdown.Item disabled>
-                    <pre
+                    <code
                       style={{
                         width: "200px",
                         overflow: "hidden",
@@ -180,7 +180,7 @@ const Navigation = () => {
                       }}
                     >
                       Email: {userData?.email}
-                    </pre>
+                    </code>
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/vault">
                     Vault
