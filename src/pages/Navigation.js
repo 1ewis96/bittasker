@@ -8,6 +8,7 @@ import {
   Badge,
   Button,
   Spinner,
+  Wallet2,
 } from "react-bootstrap";
 import {
   FaSignInAlt,
@@ -156,10 +157,6 @@ const Navigation = () => {
     <WalletBadge />
   </div>
 </Dropdown.Toggle>
-
-
-
-
                 <Dropdown.Menu>
                   <Dropdown.Item disabled>
                     <pre
@@ -210,7 +207,7 @@ const Navigation = () => {
                   position: "relative", // Allows positioning context for badge inside the button
                 }}
               >
-              <i className="bi bi-wallet2"></i>
+                <wallet2 className="ms-2" />
               </Dropdown.Toggle>
                <Dropdown.Menu>
                   <Dropdown.Item disabled>
