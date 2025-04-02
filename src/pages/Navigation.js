@@ -221,7 +221,7 @@ const Navigation = () => {
               </Dropdown.Toggle>
                <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/purchase">
-                    Purchase
+                    Store
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/swap">
                     Swap
