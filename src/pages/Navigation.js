@@ -199,8 +199,9 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Nav>
-              <Dropdown>
+              <Row className="align-items-start">
+                <Col xs={12} md="auto" className="mb-2">
+                <Dropdown>
               <Dropdown.Toggle
                 variant="dark"
                 id="profile-dropdown"
@@ -228,8 +229,9 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              
-              <Dropdown>
+                </Col>
+                <Col xs={12} md="auto" className="mb-2">
+                <Dropdown>
               <Dropdown.Toggle
                 variant="dark"
                 id="profile-dropdown"
@@ -257,8 +259,9 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              
-              <Dropdown>
+                </Col>            
+                <Col xs={12} md="auto" className="mb-2">
+                <Dropdown>
               <Dropdown.Toggle
                 variant="dark"
                 id="profile-dropdown"
@@ -286,7 +289,9 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/logout">Resources</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              </Nav>
+                </Col>
+                </Row>
+            
             </Nav>
           ) : (
             <Nav>
