@@ -8,13 +8,13 @@ import {
   Badge,
   Button,
   Spinner,
-  Wallet2,
 } from "react-bootstrap";
 import {
   FaSignInAlt,
   FaUserPlus,
   FaLock,
   FaSyncAlt,
+  Wallet2,
 } from "react-icons/fa";
 import { ethers } from "ethers";
 import useAuthCheck from "../hooks/auth/TokenValidation";
