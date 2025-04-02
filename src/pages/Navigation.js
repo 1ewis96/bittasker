@@ -206,7 +206,7 @@ const Navigation = () => {
                 className="d-flex align-items-center"
                 style={{
                   padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
-                  minWidth: "150px",   // Ensure the button is wide enough to hold the avatar and badge
+                  minWidth: "50px",   // Ensure the button is wide enough to hold the avatar and badge
                   position: "relative", // Allows positioning context for badge inside the button
                 }}
               >
@@ -235,7 +235,7 @@ const Navigation = () => {
                 className="d-flex align-items-center"
                 style={{
                   padding: "5px 15px", // Adjust the padding to ensure the elements inside the button have space
-                  minWidth: "150px",   // Ensure the button is wide enough to hold the avatar and badge
+                  minWidth: "50px",   // Ensure the button is wide enough to hold the avatar and badge
                   position: "relative", // Allows positioning context for badge inside the button
                 }}
               >
