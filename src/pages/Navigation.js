@@ -14,7 +14,7 @@ import {
   FaUserPlus,
   FaLock,
   FaSyncAlt,
-  Wallet2,
+  FaWallet,
 } from "react-icons/fa";
 import { ethers } from "ethers";
 import useAuthCheck from "../hooks/auth/TokenValidation";
@@ -207,7 +207,7 @@ const Navigation = () => {
                   position: "relative", // Allows positioning context for badge inside the button
                 }}
               >
-                <wallet2 className="ms-2" />
+                <FaWallet className="ms-2" />
               </Dropdown.Toggle>
                <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/purchase">
