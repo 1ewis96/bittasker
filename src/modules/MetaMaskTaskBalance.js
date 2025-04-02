@@ -158,11 +158,11 @@ const WalletBadge = () => {
 
  style={{
 
-   backgroundColor: 'rgba(255, 193, 7, 0.25)',
+   backgroundColor: 'rgba(35, 35, 33, 0.25)',
 
    color: '#fff',
 
-   border: '1px solid #d39e00',
+   border: '1px solidrgb(109, 109, 109)',
 
    borderRadius: '4px',
 
