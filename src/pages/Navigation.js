@@ -209,28 +209,7 @@ const Navigation = () => {
     position: "relative", // Allows positioning context for badge inside the button
   }}
 >
-  {/* Avatar Image */}
-  <img
-    src={
-      userData?.avatar?.path
-        ? `${s3Bucket}/avatars/${userData.avatar.path}`
-        : `${s3Bucket}/avatars/default.jpg`
-    }
-    alt="Profile"
-    width="40"
-    height="40"
-    style={{
-      borderRadius: "50%",
-      marginRight: "10px",  // Space between avatar and badge
-      objectFit: "cover",
-      border: "3px solid #fff",
-    }}
-  />
-  
-  {/* Wallet Badge inside the dropdown button */}
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <WalletBadge />
-  </div>
+<i className="bi bi-wallet2"></i>
 </Dropdown.Toggle>
 
 
