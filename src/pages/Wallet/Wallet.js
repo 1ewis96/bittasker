@@ -14,12 +14,12 @@ import {
 } from "react-bootstrap";
 import { formatUnits } from "ethers";
 import { FiCopy, FiChevronDown, FiChevronUp } from "react-icons/fi";
-import SubNav from "../pages/Subnav";
+import SubNav from "../../pages/Subnav";
 
-import Navigation from "./Navigation";
-import Footer from "./Footer";
-import MetaMaskBanner from "../modules/MetaMaskBanner";
-import AuthBanner from "../modules/AuthBanner";
+import Navigation from "../Navigation";
+import Footer from "../Footer";
+import MetaMaskBanner from "../../modules/MetaMaskBanner";
+import AuthBanner from "../../modules/AuthBanner";
 
 const Wallet = () => {
   const [walletAddress, setWalletAddress] = useState(null);
