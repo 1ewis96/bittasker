@@ -185,12 +185,18 @@ const Navigation = () => {
                       Email: {userData?.email}
                     </code>
                   </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/wallet">
+                    Wallet
+                  </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/security">
                     Security
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/settings">
                     Settings
                   </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
+                  
+                  <Dropdown.Divider />
                   <Dropdown.Item
                     onClick={() => {
                       const logoutUrl = `${cognitoURL}/logout?client_id=${cognitoClientID}&logout_uri=${logoutReturnURL}`;
@@ -199,9 +205,7 @@ const Navigation = () => {
                   >
                     Sign Out
                   </Dropdown.Item>
-                  <Dropdown.Divider />
-
-                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
+                
                 </Dropdown.Menu>
               </Dropdown>
               <Row className="align-items-start">
@@ -220,7 +224,7 @@ const Navigation = () => {
                 <FaWallet className="ms-2" />
               </Dropdown.Toggle>
                <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/purchase">
+                  <Dropdown.Item as={Link} to="/store">
                     Store
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/swap">
@@ -229,12 +233,12 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/marketplace">
                     Marketplace
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/vault">
+                  <Dropdown.Item as={Link} to="/stake">
                     Stake
                   </Dropdown.Item>
                   <Dropdown.Divider />
 
-                  <Dropdown.Item as={Link} to="/logout">Docs</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/cdn">Docs</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
                 </Col>
@@ -258,15 +262,15 @@ const Navigation = () => {
                   <Dropdown.Item as={Link} to="/inventory">
                     Inventory
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/inventory">
+                  <Dropdown.Item as={Link} to="/trade">
                     Trade
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/inventory">
+                  <Dropdown.Item as={Link} to="/sell">
                     Sell
                   </Dropdown.Item>
                   <Dropdown.Divider />
 
-                  <Dropdown.Item as={Link} to="/logout">Clothing</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/clothing">Clothing</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
                 </Col>   
